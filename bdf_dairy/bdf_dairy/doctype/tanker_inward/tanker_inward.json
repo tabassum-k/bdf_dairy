@@ -1,0 +1,280 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "T-IN-.####",
+ "creation": "2024-10-27 08:29:44.750913",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "from_date",
+  "dcs",
+  "column_break_sqaaa",
+  "to_date",
+  "vehicle_number",
+  "column_break_5iqml",
+  "from_shift",
+  "driver",
+  "column_break_2fuve",
+  "to_shift",
+  "challan_number",
+  "column_break_cfsjz",
+  "milk_type",
+  "tanker_inward_date",
+  "section_break_r8jr5",
+  "milk_received_from_dcs",
+  "section_break_sq2be",
+  "total_qty_in_liter",
+  "column_break_k1gjc",
+  "total_qty_in_kg",
+  "column_break_zab9a",
+  "fat",
+  "column_break_qynk2",
+  "snf",
+  "column_break_okvu8",
+  "kg_fat",
+  "column_break_jecfm",
+  "kg_snf",
+  "section_break_7yqb1",
+  "milk_received_from_tanker",
+  "difference_of_dcs_and_tanker_milk_received",
+  "warhouse_section",
+  "tanker_warehouse",
+  "column_break_sd49w",
+  "plant_warehouse",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date"
+  },
+  {
+   "fieldname": "column_break_sqaaa",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date"
+  },
+  {
+   "fieldname": "column_break_5iqml",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "from_shift",
+   "fieldtype": "Select",
+   "label": "From Shift",
+   "options": "\nMorning\nEvening"
+  },
+  {
+   "fieldname": "column_break_2fuve",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "to_shift",
+   "fieldtype": "Select",
+   "label": "To Shift",
+   "options": "\nMorning\nEvening"
+  },
+  {
+   "fieldname": "section_break_r8jr5",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "milk_received_from_dcs",
+   "fieldtype": "Table",
+   "label": "Milk Received From DCS",
+   "options": "Milk Received From DCS"
+  },
+  {
+   "fieldname": "milk_received_from_tanker",
+   "fieldtype": "Table",
+   "label": "Milk Received From Tanker",
+   "options": "Milk Received From Tanker"
+  },
+  {
+   "fieldname": "difference_of_dcs_and_tanker_milk_received",
+   "fieldtype": "Table",
+   "label": "Difference of DCS and Tanker Milk Received",
+   "options": "Difference of DCS and Tanker Milk Received"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Tanker Inward",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Tanker Inward",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "warhouse_section",
+   "fieldtype": "Section Break",
+   "label": "Warhouse"
+  },
+  {
+   "default": "Tanker - BDF",
+   "fieldname": "tanker_warehouse",
+   "fieldtype": "Link",
+   "label": "Tanker Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "column_break_sd49w",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "DCS-08Plant - BDF",
+   "fieldname": "plant_warehouse",
+   "fieldtype": "Link",
+   "label": "Plant Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "column_break_cfsjz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Cow",
+   "fieldname": "milk_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Milk Type",
+   "options": "Cow\nBuffalo\nMix",
+   "reqd": 1
+  },
+  {
+   "fieldname": "dcs",
+   "fieldtype": "Link",
+   "label": "DCS",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "vehicle_number",
+   "fieldtype": "Link",
+   "label": "Vehicle Number",
+   "options": "Vehicle"
+  },
+  {
+   "fieldname": "driver",
+   "fieldtype": "Link",
+   "label": "Driver",
+   "options": "Driver"
+  },
+  {
+   "fieldname": "challan_number",
+   "fieldtype": "Data",
+   "label": "Challan Number"
+  },
+  {
+   "fieldname": "section_break_sq2be",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "total_qty_in_liter",
+   "fieldtype": "Float",
+   "label": "Total Qty in Liter"
+  },
+  {
+   "fieldname": "column_break_k1gjc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_qty_in_kg",
+   "fieldtype": "Float",
+   "label": "Total Qty in Kg"
+  },
+  {
+   "fieldname": "column_break_zab9a",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fat",
+   "fieldtype": "Float",
+   "label": "FAT"
+  },
+  {
+   "fieldname": "column_break_qynk2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "snf",
+   "fieldtype": "Float",
+   "label": "SNF"
+  },
+  {
+   "fieldname": "column_break_okvu8",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "kg_fat",
+   "fieldtype": "Float",
+   "label": "KG FAT"
+  },
+  {
+   "fieldname": "column_break_jecfm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "kg_snf",
+   "fieldtype": "Float",
+   "label": "KG SNF"
+  },
+  {
+   "fieldname": "section_break_7yqb1",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "tanker_inward_date",
+   "fieldtype": "Date",
+   "label": "Tanker Inward Date"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [
+  {
+   "link_doctype": "Stock Entry",
+   "link_fieldname": "custom_tanker_inward"
+  }
+ ],
+ "modified": "2024-10-29 07:46:15.277547",
+ "modified_by": "Administrator",
+ "module": "BDF Dairy",
+ "name": "Tanker Inward",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
