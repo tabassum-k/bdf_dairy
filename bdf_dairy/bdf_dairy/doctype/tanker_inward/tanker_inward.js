@@ -1,6 +1,72 @@
 // Copyright (c) 2024, BDF and contributors
 // For license information, please see license.txt
 frappe.ui.form.on('Tanker Inward', {
+    async refresh(frm) {
+        try {
+            // Get linked stock entries
+            const linkedStockEntriesResponse = await frappe.call({
+                method: "get_linked_stock_entries",  
+                doc: frm.doc
+            });
+
+            if (linkedStockEntriesResponse.message < 2 && frm.doc.docstatus === 1) { 
+                
+                const materialReceiptResponse = await frm.call({
+                    method: 'get_material_receipt',
+                    doc: frm.doc,
+                });
+                console.log(materialReceiptResponse.message)
+                if (materialReceiptResponse.message > 0 && frm.doc.docstatus === 1) {
+                    frm.add_custom_button('Stock Receipt To Tanker', () => {
+                        frm.call({
+                            method: 'material_receipt_to_tanker',
+                            doc: frm.doc
+                        });
+                    });
+                }
+
+                frm.add_custom_button('Stock Entry To Tanker', () => {
+                    frm.call({
+                        method: 'material_transfer_from_dcs_to_tanker',
+                        doc: frm.doc
+                    });
+                });
+    
+                frm.add_custom_button('Stock Entry To Plant', () => {
+                    frm.call({
+                        method: 'material_transfer_from_tanker_to_plant',
+                        doc: frm.doc
+                    });
+                });
+            }
+        } catch (error) {
+            console.error("Error in refresh:", error);
+            frappe.msgprint("An error occurred while processing the buttons. Please try again.");
+        }
+    },  
+    // refresh(frm) {
+    //     frappe.call({
+    //         method: "get_linked_stock_entries",  
+    //         doc: frm.doc,  
+    //         callback: function(response) {
+    //             if (response.message < 4 && frm.doc.docstatus === 1) {
+    //                 frm.add_custom_button('Stock Entry To Tanker', () => {
+    //                     frm.call({
+    //                         method: 'material_transfer_from_dcs_to_tanker',
+    //                         doc: frm.doc
+    //                     });
+    //                 });
+    
+    //                 frm.add_custom_button('Stock Entry To Plant', () => {
+    //                     frm.call({
+    //                         method: 'material_transfer_from_tanker_to_plant',
+    //                         doc: frm.doc
+    //                     });
+    //                 });
+    //             }
+    //         }
+    //     });
+    // },    
     before_save(frm){
         const today = new Date();
         const formattedDate = today.toISOString().split('T')[0];
