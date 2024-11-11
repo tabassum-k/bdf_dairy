@@ -1,216 +1,147 @@
 import frappe
-from frappe import _, scrub
-from frappe.utils import add_days, add_to_date, flt, getdate
-from erpnext.accounts.utils import get_fiscal_year
+from frappe.utils import getdate, add_to_date, add_days, formatdate
+from dateutil.relativedelta import relativedelta
 
+def get_period_date_ranges(filters):
+    from_date, to_date = getdate(filters.from_date), getdate(filters.to_date)
+    date_ranges = []
+    increment = {"Monthly": 1, "Quarterly": 3, "Yearly": 12}.get(filters.range, 1)
+
+    if filters.range == "Daily":
+        date_ranges = [(from_date + relativedelta(days=i), from_date + relativedelta(days=i)) 
+                       for i in range((to_date - from_date).days + 1)]
+    elif filters.range == "Weekly":
+        current_start = from_date - relativedelta(days=from_date.weekday())
+        while current_start <= to_date:
+            week_end = current_start + relativedelta(days=6)
+            date_ranges.append((current_start, min(week_end, to_date)))
+            current_start += relativedelta(weeks=1)
+    elif filters.range == "Monthly":
+        current_start = from_date.replace(day=1)
+        while current_start <= to_date:
+            month_end = add_to_date(current_start, months=1, as_string=False) - relativedelta(days=1)
+            date_ranges.append((current_start, min(month_end, to_date)))
+            current_start = add_to_date(current_start, months=1, as_string=False)
+    elif filters.range == "Quarterly":
+        current_start = from_date.replace(month=((from_date.month - 1) // 3) * 3 + 1, day=1)
+        while current_start <= to_date:
+            quarter_end = add_to_date(current_start, months=3, as_string=False) - relativedelta(days=1)
+            date_ranges.append((current_start, min(quarter_end, to_date)))
+            current_start = add_to_date(current_start, months=3, as_string=False)
+    elif filters.range == "Yearly":
+        current_start = from_date.replace(month=1, day=1)
+        while current_start <= to_date:
+            year_end = add_to_date(current_start, years=1, as_string=False) - relativedelta(days=1)
+            date_ranges.append((current_start, min(year_end, to_date)))
+            current_start = add_to_date(current_start, years=1, as_string=False)
+
+    return date_ranges
 
 def execute(filters=None):
-	return SalesInvoiceAnalytics(filters).run()
+    columns = [
+        {
+            "label": "Customer",
+            "fieldname": "customer",
+            "fieldtype": "Link",
+            "options": "Customer",
+            "width": 140,
+        },
+        {
+            "label": "Customer Name",
+            "fieldname": "customer_name",
+            "fieldtype": "Data",
+            "width": 140,
+        },
+        {
+            "label": "Item",
+            "fieldname": "item_code",
+            "fieldtype": "Link",
+            "options": "Item",
+            "width": 140,
+        },
+        {
+            "label": "Item Name",
+            "fieldname": "item_name",
+            "fieldtype": "Data",
+            "width": 140,
+        },
+    ]
 
-class SalesInvoiceAnalytics:
-	def __init__(self, filters=None):
-		self.filters = frappe._dict(filters or {})
-		self.date_field = "posting_date"
-		self.months = [
-			"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-			"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-		]
-		self.get_period_date_ranges()
+    date_ranges = get_period_date_ranges(filters)
+    date_columns = []
+    for start, end in date_ranges:
+        if filters.range == "Daily":
+            label = formatdate(start, "dd-MM-yyyy")
+        elif filters.range == "Weekly":
+            label = f"{formatdate(start, 'dd-MM-yyyy')} to {formatdate(end, 'dd-MM-yyyy')}"
+        elif filters.range == "Monthly":
+            label = start.strftime("%b")
+        elif filters.range == "Quarterly":
+            label = f"Quart {((start.month - 1) // 3) + 1}"
+        elif filters.range == "Yearly":
+            label = start.strftime("%Y")
+        
+        date_columns.append({
+            "label": label,
+            "fieldname": f"{start}_{end}",
+            "fieldtype": "Float",
+            "width": 100,
+        })
 
-	def run(self):
-		self.get_columns()
-		self.get_data()
-		self.get_chart_data()
+    columns.extend(date_columns)
 
-		# Skipping total row for tree-view reports
-		skip_total_row = 0
+    filter_values = {
+        'company': filters.company,
+        'from_date': filters.from_date,
+        'to_date': filters.to_date,
+        "customers": tuple(filters.get("party", [])) if filters.get("party") else None,
+        "item": tuple(filters.get("item", [])) if filters.get("item") else None,
+    }
+    
+    query = """
+        SELECT 
+            sii.item_code,
+            sii.item_name,
+            sii.qty,
+            sii.uom,
+            si.posting_date,
+            si.customer,
+            si.customer_name
+        FROM 
+            `tabSales Invoice Item` AS sii
+        JOIN 
+            `tabSales Invoice` AS si ON sii.parent = si.name
+        WHERE 
+            si.docstatus = 1
+            AND si.company = %(company)s
+            AND si.posting_date BETWEEN %(from_date)s AND %(to_date)s
+    """
 
-		return self.columns, self.data, None, self.chart, None, skip_total_row
+    if filters.get("party"):
+        query += " AND si.customer IN %(customers)s"
+    if filters.get("item"):
+        query += " AND sii.item_code IN %(item)s"
 
-	def get_columns(self):
-		self.columns = [
-			{
-				"label": _("Customer"),
-				"fieldname": "customer",
-				"fieldtype": "Link",
-				"options": "Customer",
-				"width": 140,
-			},
-			{
-				"label": _("Customer Name"),
-				"fieldname": "customer_name",
-				"fieldtype": "Data",
-				"width": 140,
-			},
-			{
-				"label": _("Item"),
-				"fieldname": "item",
-				"fieldtype": "Link",
-				"options": "Item",
-				"width": 140,
-			},
-			{
-				"label": _("Item Name"),
-				"fieldname": "item_name",
-				"fieldtype": "Data",
-				"width": 140,
-			},
-   			{
-				"label": _("Shift"),
-				"fieldname": "shift",
-				"fieldtype": "Data",
-				"width": 140,
-			},
-		]
+    data = frappe.db.sql(query, filter_values, as_dict=True)
 
-		for end_date in self.periodic_daterange:
-			period = self.get_period(end_date)
-			self.columns.append(
-				{"label": _(period), "fieldname": scrub(period), "fieldtype": "Float", "width": 120}
-			)
+    result = []
+    for row in data:
+        row_data = {
+            "customer": row["customer"],
+            "customer_name": row["customer_name"],
+            "item_code": row["item_code"],
+            "item_name": row["item_name"]
+        }
+        for start, end in date_ranges:
+            fieldname = f"{start}_{end}"
+            row_data[fieldname] = 0.0
 
-		self.columns.append({"label": _("Total"), "fieldname": "total", "fieldtype": "Float", "width": 120})
+        for start, end in date_ranges:
+            fieldname = f"{start}_{end}"
+            if start <= row["posting_date"] <= end:
+                row_data[fieldname] += row["qty"]
+        
+        result.append(row_data)
 
-	def get_data(self):
-		self.get_sales_invoice_data()
-		self.get_rows()
+    return columns, result
 
-	def get_sales_invoice_data(self):
-		value_field = "base_net_total" if self.filters["value_quantity"] == "Value" else "total_qty"
-		filters = {
-			"company": self.filters.company,
-			"from_date": self.filters.from_date,
-			"to_date": self.filters.to_date,
-			"customers": tuple(self.filters.get("party", [])) if self.filters.get("party") else None,
-			"items": tuple(self.filters.get("item", [])) if self.filters.get("item") else None,
-			"shift": self.filters.get("shift", None)
-		}
-
-		query = """
-		SELECT 
-			si.name AS sales_invoice,
-			sii.item_code,
-			sii.item_name,
-			sii.qty,
-			sii.amount,
-			si.{date_field},
-			si.customer,
-			si.delivery_shift,
-			si.customer_name,
-			si.{value_field} 
-		FROM 
-			`tabSales Invoice Item` AS sii
-		JOIN 
-			`tabSales Invoice` AS si ON sii.parent = si.name
-		WHERE 
-			si.docstatus = 1
-			AND si.company = %(company)s
-			AND si.{date_field} BETWEEN %(from_date)s AND %(to_date)s
-		""".format(date_field=self.date_field, value_field=value_field)
-
-		if filters["customers"]:
-			query += " AND si.customer IN %(customers)s"
-		if filters["items"]:
-			query += " AND sii.item_code IN %(items)s"
-		if filters["shift"]:
-			query += " AND si.delivery_shift = %(shift)s"
-
-		query += " ORDER BY si.name, si.customer, si.delivery_shift, sii.item_code"
-		self.entries = frappe.db.sql(query, filters, as_dict=True)
-		self.customer_names = {d.customer: d.customer_name for d in self.entries}
-
-	def get_rows(self):
-		self.data = []
-		self.get_periodic_data()
-
-		for (customer, item_code, delivery_shift), period_data in self.entity_periodic_data.items():
-			row = {
-				"customer": customer,
-				"customer_name": self.customer_names.get(customer),
-				"item": item_code,
-				"item_name": next((d.item_name for d in self.entries if d.item_code == item_code), ""),
-				"shift": delivery_shift
-			}
-			total = 0
-			for end_date in self.periodic_daterange:
-				period = self.get_period(end_date)
-				amount = flt(period_data.get(period, 0.0))
-				row[scrub(period)] = amount
-				total += amount
-
-			row["total"] = total
-			self.data.append(row)
-
-
-	def get_period(self, posting_date):
-		if self.filters.range == "Weekly":
-			period = _("Week {0} {1}").format(str(posting_date.isocalendar()[1]), str(posting_date.year))
-		elif self.filters.range == "Monthly":
-			period = _(str(self.months[posting_date.month - 1])) + " " + str(posting_date.year)
-		elif self.filters.range == "Quarterly":
-			period = _("Quarter {0} {1}").format(
-				str(((posting_date.month - 1) // 3) + 1), str(posting_date.year)
-			)
-		elif self.filters.range == "Daily":
-			period = posting_date.strftime("%Y-%m-%d")
-		else:
-			period = str(get_fiscal_year(posting_date, company=self.filters.company)[0])
-
-		return period
-
-
-	def get_periodic_data(self):
-		self.entity_periodic_data = frappe._dict()
-
-		for d in self.entries:
-			period = self.get_period(d.get(self.date_field))
-			key = (d.customer, d.item_code, d.delivery_shift)  # Added delivery_shift to the key
-			if key not in self.entity_periodic_data:
-				self.entity_periodic_data[key] = frappe._dict()
-			self.entity_periodic_data[key][period] = self.entity_periodic_data[key].get(period, 0.0) + \
-				flt(d.base_net_total if self.filters["value_quantity"] == "Value" else d.total_qty)
-
-
-
-	def get_period_date_ranges(self):
-		from dateutil.relativedelta import MO, relativedelta
-		from_date, to_date = getdate(self.filters.from_date), getdate(self.filters.to_date)
-		increment = {"Monthly": 1, "Quarterly": 3, "Yearly": 12}.get(self.filters.range, 1)
-
-		if self.filters.range == "Daily":
-			self.periodic_daterange = [from_date + relativedelta(days=i) for i in range((to_date - from_date).days + 1)]
-
-		elif self.filters.range == "Monthly":
-			from_date = from_date.replace(day=1)
-			self.periodic_daterange = []
-			while from_date <= to_date:
-				self.periodic_daterange.append(from_date)
-				from_date = add_to_date(from_date, months=1)
-
-		elif self.filters.range == "Quarterly":
-			from_date = from_date.replace(month=((from_date.month - 1) // 3) * 3 + 1, day=1)
-			self.periodic_daterange = []
-			while from_date <= to_date:
-				self.periodic_daterange.append(from_date)
-				from_date = add_to_date(from_date, months=3)
-
-		elif self.filters.range == "Yearly":
-			from_date = from_date.replace(month=1, day=1)
-			self.periodic_daterange = []
-			while from_date <= to_date:
-				self.periodic_daterange.append(from_date)
-				from_date = add_to_date(from_date, years=1)
-
-		elif self.filters.range == "Weekly":
-			from_date = from_date - relativedelta(days=from_date.weekday())
-			self.periodic_daterange = []
-			while from_date <= to_date:
-				self.periodic_daterange.append(from_date)
-				from_date = add_days(from_date, 7) 
-
-
-	def get_chart_data(self):
-		length = len(self.columns)
-		labels = [d.get("label") for d in self.columns[2 : length - 1]]
-		self.chart = {"data": {"labels": labels, "datasets": []}, "type": "line"}
-		self.chart["fieldtype"] = "Currency" if self.filters["value_quantity"] == "Value" else "Float"

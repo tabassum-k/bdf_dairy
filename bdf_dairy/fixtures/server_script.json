@@ -1,0 +1,18 @@
+[
+ {
+  "allow_guest": 0,
+  "api_method": null,
+  "cron_format": null,
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Server Script",
+  "doctype_event": "After Submit",
+  "event_frequency": "All",
+  "modified": "2024-11-11 20:05:14.202807",
+  "module": "BDF Dairy",
+  "name": "Process Loss Handling For Work Order",
+  "reference_doctype": "Stock Entry",
+  "script": "if doc.purpose == \"Manufacture\":\n    stock_entry = frappe.new_doc(\"Stock Entry\")\n    stock_entry.stock_entry_type = \"Handling Loss\"\n    stock_entry_flag = False\n    for itm in doc.items:\n        if itm.custom_handling_loss_qty > 0 and itm.s_warehouse:\n            stock_entry_flag = True\n            stock_entry.append('items', {\n                'item_code': itm.item_code, \n                's_warehouse': itm.s_warehouse,\n                'qty': itm.custom_handling_loss_qty\n            })\n    if stock_entry_flag:\n        stock_entry.insert()\n        stock_entry.submit()\n",
+  "script_type": "DocType Event"
+ }
+]
