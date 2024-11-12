@@ -23,6 +23,31 @@ frappe.query_reports["Sales Invoice Analytics"] = {
 			reqd: 1,
 		},
 		{
+			fieldname: "type",
+			label: __("Type"),
+			fieldtype: "Select",
+			options: [
+				{ value: "Quantity", label: __("Quantity") },
+				{ value: "Amount", label: __("Amount") }
+			],
+			default: "Quantity",
+			reqd: 1,
+		},
+		{
+			fieldname: "range",
+			label: __("Range"),
+			fieldtype: "Select",
+			options: [
+				{ value: "Daily", label: __("Daily") },
+				{ value: "Weekly", label: __("Weekly") },
+				{ value: "Monthly", label: __("Monthly") },
+				{ value: "Quarterly", label: __("Quarterly") },
+				{ value: "Yearly", label: __("Yearly") },
+			],
+			default: "Monthly",
+			reqd: 1,
+		},
+		{
 			fieldname: "party",
 			label: __("Customer"),
 			fieldtype: "MultiSelectList",
@@ -41,20 +66,6 @@ frappe.query_reports["Sales Invoice Analytics"] = {
 				return frappe.db.get_link_options("Item", txt);
 			},
 			reqd: 0,
-		},
-		{
-			fieldname: "range",
-			label: __("Range"),
-			fieldtype: "Select",
-			options: [
-				{ value: "Daily", label: __("Daily") },
-				{ value: "Weekly", label: __("Weekly") },
-				{ value: "Monthly", label: __("Monthly") },
-				{ value: "Quarterly", label: __("Quarterly") },
-				{ value: "Yearly", label: __("Yearly") },
-			],
-			default: "Monthly",
-			reqd: 1,
 		},
 	],
 };

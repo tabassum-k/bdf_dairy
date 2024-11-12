@@ -66,7 +66,7 @@ def execute(filters=None):
 			"width": 140,
 		},
 	]
-
+	
 	date_ranges = get_period_date_ranges(filters)
 	date_columns = []
 	for start, end in date_ranges:
@@ -97,34 +97,61 @@ def execute(filters=None):
 		"customers": tuple(filters.get("party", [])) if filters.get("party") else None,
 		"item": tuple(filters.get("item", [])) if filters.get("item") else None,
 	}
-	
-	query = """
-		SELECT 
-			sii.item_code,
-			sii.item_name,
-			SUM(sii.qty) AS qty,
-			sii.uom,
-			si.posting_date,
-			si.customer,
-			si.customer_name
-		FROM 
-			`tabSales Invoice Item` AS sii
-		JOIN 
-			`tabSales Invoice` AS si ON sii.parent = si.name
-		WHERE 
-			si.docstatus = 1
-			AND si.company = %(company)s
-			AND si.posting_date BETWEEN %(from_date)s AND %(to_date)s
-	"""
+	if filters.type == "Quantity":
+		query = """
+			SELECT 
+				sii.item_code,
+				sii.item_name,
+				SUM(sii.qty) AS qty,
+				sii.uom,
+				si.posting_date,
+				si.customer,
+				si.customer_name
+			FROM 
+				`tabSales Invoice Item` AS sii
+			JOIN 
+				`tabSales Invoice` AS si ON sii.parent = si.name
+			WHERE 
+				si.docstatus = 1
+				AND si.company = %(company)s
+				AND si.posting_date BETWEEN %(from_date)s AND %(to_date)s
+		"""
 
-	if filters.get("party"):
-		query += " AND si.customer IN %(customers)s"
-	if filters.get("item"):
-		query += " AND sii.item_code IN %(item)s"
+		if filters.get("party"):
+			query += " AND si.customer IN %(customers)s"
+		if filters.get("item"):
+			query += " AND sii.item_code IN %(item)s"
 
-	query += " GROUP BY sii.item_code, sii.uom, si.customer"
-	data = frappe.db.sql(query, filter_values, as_dict=True)
+		query += " GROUP BY sii.item_code, sii.uom, si.customer"
+		data = frappe.db.sql(query, filter_values, as_dict=True)
 
+	elif filters.type == "Amount":
+		query = """
+			SELECT 
+				sii.item_code,
+				sii.item_name,
+				SUM(sii.amount) AS qty,
+				sii.uom,
+				si.posting_date,
+				si.customer,
+				si.customer_name
+			FROM 
+				`tabSales Invoice Item` AS sii
+			JOIN 
+				`tabSales Invoice` AS si ON sii.parent = si.name
+			WHERE 
+				si.docstatus = 1
+				AND si.company = %(company)s
+				AND si.posting_date BETWEEN %(from_date)s AND %(to_date)s
+		"""
+
+		if filters.get("party"):
+			query += " AND si.customer IN %(customers)s"
+		if filters.get("item"):
+			query += " AND sii.item_code IN %(item)s"
+
+		query += " GROUP BY sii.item_code, sii.uom, si.customer"
+		data = frappe.db.sql(query, filter_values, as_dict=True)
 
 	result = []
 	for row in data:
