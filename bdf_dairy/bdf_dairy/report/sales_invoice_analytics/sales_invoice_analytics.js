@@ -67,5 +67,15 @@ frappe.query_reports["Sales Invoice Analytics"] = {
 			},
 			reqd: 0,
 		},
+		{
+			fieldname: "item_group",
+			label: __("Item Group"),
+			fieldtype: "MultiSelectList",
+			options: "Item Group",
+			get_data: function(txt) {
+				return frappe.db.get_link_options("Item Group", txt);
+			},
+			reqd: 0,
+		},
 	],
 };

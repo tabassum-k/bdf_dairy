@@ -65,6 +65,19 @@ def execute(filters=None):
 			"fieldtype": "Data",
 			"width": 140,
 		},
+		{
+			"label": "Item Group",
+			"fieldname": "item_group",
+			"fieldtype": "Link",
+			"options": "Item Group",
+			"width": 140,
+		},
+		{
+			"label": "Weight Per Unit",
+			"fieldname": "weight_per_unit",
+			"fieldtype": "Float",
+			"width": 100,
+		},
 	]
 	
 	date_ranges = get_period_date_ranges(filters)
@@ -90,19 +103,36 @@ def execute(filters=None):
 
 	columns.extend(date_columns)
 
+	# Add columns for Total and Total Weight
+	columns.append({
+		"label": "Total",
+		"fieldname": "total",
+		"fieldtype": "Float",
+		"width": 120,
+	})
+	columns.append({
+		"label": "Total Weight",
+		"fieldname": "total_weight",
+		"fieldtype": "Float",
+		"width": 120,
+	})
+
 	filter_values = {
 		'company': filters.company,
 		'from_date': filters.from_date,
 		'to_date': filters.to_date,
 		"customers": tuple(filters.get("party", [])) if filters.get("party") else None,
 		"item": tuple(filters.get("item", [])) if filters.get("item") else None,
+		"item_group": tuple(filters.get("item_group", [])) if filters.get("item_group") else None,
 	}
 	if filters.type == "Quantity":
 		query = """
 			SELECT 
 				sii.item_code,
 				sii.item_name,
-				SUM(sii.qty) AS qty,
+				i.item_group,
+				i.weight_per_unit,
+				SUM(sii.stock_qty) AS qty,
 				sii.uom,
 				si.posting_date,
 				si.customer,
@@ -111,6 +141,8 @@ def execute(filters=None):
 				`tabSales Invoice Item` AS sii
 			JOIN 
 				`tabSales Invoice` AS si ON sii.parent = si.name
+			JOIN 
+				`tabItem` AS i ON sii.item_code = i.item_code
 			WHERE 
 				si.docstatus = 1
 				AND si.company = %(company)s
@@ -121,8 +153,10 @@ def execute(filters=None):
 			query += " AND si.customer IN %(customers)s"
 		if filters.get("item"):
 			query += " AND sii.item_code IN %(item)s"
+		if filters.get('item_group'):
+			query += " AND i.item_group IN %(item_group)s"
 
-		query += " GROUP BY sii.item_code, sii.uom, si.customer"
+		query += " GROUP BY sii.item_code, sii.uom, si.customer ORDER BY si.customer"
 		data = frappe.db.sql(query, filter_values, as_dict=True)
 
 	elif filters.type == "Amount":
@@ -130,6 +164,8 @@ def execute(filters=None):
 			SELECT 
 				sii.item_code,
 				sii.item_name,
+				i.item_group,
+				i.weight_per_unit,
 				SUM(sii.amount) AS qty,
 				sii.uom,
 				si.posting_date,
@@ -139,6 +175,8 @@ def execute(filters=None):
 				`tabSales Invoice Item` AS sii
 			JOIN 
 				`tabSales Invoice` AS si ON sii.parent = si.name
+			JOIN 
+				`tabItem` AS i ON sii.item_code = i.item_code
 			WHERE 
 				si.docstatus = 1
 				AND si.company = %(company)s
@@ -149,8 +187,10 @@ def execute(filters=None):
 			query += " AND si.customer IN %(customers)s"
 		if filters.get("item"):
 			query += " AND sii.item_code IN %(item)s"
+		if filters.get('item_group'):
+			query += " AND i.item_group IN %(item_group)s"
 
-		query += " GROUP BY sii.item_code, sii.uom, si.customer"
+		query += " GROUP BY sii.item_code, sii.uom, si.customer ORDER BY si.customer"
 		data = frappe.db.sql(query, filter_values, as_dict=True)
 
 	result = []
@@ -159,8 +199,12 @@ def execute(filters=None):
 			"customer": row["customer"],
 			"customer_name": row["customer_name"],
 			"item_code": row["item_code"],
-			"item_name": row["item_name"]
+			"item_name": row["item_name"],
+			"item_group": row["item_group"],
+			"weight_per_unit": row["weight_per_unit"]
 		}
+		
+		total_qty = 0.0
 		for start, end in date_ranges:
 			fieldname = f"{start}_{end}"
 			row_data[fieldname] = 0.0
@@ -169,8 +213,11 @@ def execute(filters=None):
 			fieldname = f"{start}_{end}"
 			if start <= row["posting_date"] <= end:
 				row_data[fieldname] += row["qty"]
+				total_qty += row["qty"]
+		
+		row_data["total"] = total_qty
+		row_data["total_weight"] = total_qty * row["weight_per_unit"]
 		
 		result.append(row_data)
 
 	return columns, result
-

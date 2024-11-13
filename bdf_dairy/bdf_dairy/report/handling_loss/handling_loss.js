@@ -27,6 +27,26 @@ frappe.query_reports["Handling Loss"] = {
 			reqd: 1,
 		},
 		{
+			fieldname: "finished_item",
+			label: __("Finished Item"),
+			fieldtype: "MultiSelectList",
+			options: "Item",
+			get_data: function(txt) {
+				return frappe.db.get_link_options("Item", txt);
+			},
+			reqd: 0,
+		},
+		{
+			fieldname: "item_group",
+			label: __("Finished Item Group"),
+			fieldtype: "MultiSelectList",
+			options: "Item Group",
+			get_data: function(txt) {
+				return frappe.db.get_link_options("Item Group", txt);
+			},
+			reqd: 0,
+		},
+		{
 			fieldname: "item",
 			label: __("Item"),
 			fieldtype: "MultiSelectList",
