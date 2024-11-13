@@ -226,35 +226,14 @@ from frappe.utils import getdate, add_to_date, add_days, formatdate
 from dateutil.relativedelta import relativedelta
 
 def execute(filters=None):
-	# Base columns for item information
 	columns = [
-		{
-			"label": "Item",
-			"fieldname": "item_code",
-			"fieldtype": "Link",
-			"options": "Item",
-			"width": 140,
-		},
-		{
-			"label": "Item Name",
-			"fieldname": "item_name",
-			"fieldtype": "Data",
-			"width": 140,
-		},
-		{
-			"label": "Item Group",
-			"fieldname": "item_group",
-			"fieldtype": "Link",
-			"options": "Item Group",
-			"width": 140,
-		},
-		{
-			"label": "Weight Per Unit",
-			"fieldname": "weight_per_unit",
-			"fieldtype": "Float",
-			"width": 100,
-		},
+		{"label": "Item", "fieldname": "item_code", "fieldtype": "Link", "options": "Item", "width": 140},
+		{"label": "Item Name", "fieldname": "item_name", "fieldtype": "Data", "width": 140},
+		{"label": "Item Group", "fieldname": "item_group", "fieldtype": "Link", "options": "Item Group", "width": 140},
 	]
+
+	if filters.type == "Quantity":
+		columns.append({"label": "Weight Per Unit", "fieldname": "weight_per_unit", "fieldtype": "Float", "width": 100})
 
 	customers = frappe.get_list(
 		"Sales Invoice",
@@ -272,13 +251,14 @@ def execute(filters=None):
 		"item_group": tuple(filters.get("item_group", [])) if filters.get("item_group") else None,
 	}
 
-	query = """
+	metric_column = "sii.stock_qty" if filters.type == "Quantity" else "sii.amount"
+	query = f"""
 		SELECT 
 			sii.item_code,
 			sii.item_name,
 			i.item_group,
-			i.weight_per_unit,
-			SUM(sii.stock_qty) AS qty,
+			{'i.weight_per_unit,' if filters.type == 'Quantity' else ''} 
+			SUM({metric_column}) AS qty,
 			si.customer
 		FROM 
 			`tabSales Invoice Item` AS sii
@@ -299,10 +279,10 @@ def execute(filters=None):
 	if filters.get('item_group'):
 		query += " AND i.item_group IN %(item_group)s"
 	query += " GROUP BY sii.item_code, si.customer"
-	data = frappe.db.sql(query, filter_values, as_dict=True)
 
+	data = frappe.db.sql(query, filter_values, as_dict=True)
 	item_data = {}
-	customer_totals = {cust: 0 for cust in customers}
+	customer_totals = {cust: 0 for cust in customers}  # Track total quantity or amount per customer
 
 	for row in data:
 		item_key = row["item_code"]
@@ -311,15 +291,12 @@ def execute(filters=None):
 				"item_code": row["item_code"],
 				"item_name": row["item_name"],
 				"item_group": row["item_group"],
-				"weight_per_unit": row["weight_per_unit"],
+				"weight_per_unit": row.get("weight_per_unit", 0) if filters.type == "Quantity" else None,
 			}
 
 		if row["qty"] > 0:
 			customer_column_qty = f"{row['customer']}_qty"
-			customer_column_weight = f"{row['customer']}_weight"
-
 			item_data[item_key][customer_column_qty] = row["qty"]
-			item_data[item_key][customer_column_weight] = row["qty"] * row["weight_per_unit"]
 			customer_totals[row["customer"]] += row["qty"]
 
 	customers = [cust for cust in customers if customer_totals[cust] > 0]
@@ -327,26 +304,27 @@ def execute(filters=None):
 	for cust in customers:
 		cust_name = frappe.get_value("Customer", cust, 'customer_name')
 		columns.append({
-			"label": f"{cust_name} - Qty",
+			"label": f"{cust_name}",
 			"fieldname": f"{cust}_qty",
-			"fieldtype": "Float",
-			"width": 120,
-		})
-		columns.append({
-			"label": f"{cust_name} - Weight",
-			"fieldname": f"{cust}_weight",
 			"fieldtype": "Float",
 			"width": 120,
 		})
 
 	result = []
+
 	for item in item_data.values():
 		for cust in customers:
 			item.setdefault(f"{cust}_qty", 0)
-			item.setdefault(f"{cust}_weight", 0)
 		result.append(item)
-
+	columns.append({"label": "Total Qty", "fieldname": "total_qty", "fieldtype": "Float", "width": 140})
+	if filters.type == "Quantity":
+		columns.append({"label": "Total Wgt", "fieldname": "total_wgt", "fieldtype": "Float", "width": 140})
+	for res in result:
+		total_qty = 0
+		for key, value in res.items():
+			if key.endswith('_qty'):
+				total_qty += value
+		res['total_qty'] = total_qty
+		if filters.type == "Quantity":		
+			res['total_wgt'] = total_qty * res['weight_per_unit']
 	return columns, result
-
-
-
