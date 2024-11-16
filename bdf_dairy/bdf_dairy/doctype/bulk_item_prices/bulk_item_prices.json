@@ -1,0 +1,106 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-11-16 14:09:35.637427",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "price_list",
+  "item_price",
+  "column_break_guroe",
+  "item_code",
+  "column_break_deida",
+  "item_name",
+  "column_break_wweja",
+  "type",
+  "column_break_tw2b0",
+  "current_rate",
+  "column_break_uimar",
+  "expected_rate"
+ ],
+ "fields": [
+  {
+   "fieldname": "column_break_guroe",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Item Code",
+   "options": "Item"
+  },
+  {
+   "fieldname": "column_break_deida",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Item Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_wweja",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Type",
+   "options": "\nBuying\nSelling",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_tw2b0",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "current_rate",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Current Rate",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_uimar",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "expected_rate",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Expected Rate"
+  },
+  {
+   "fieldname": "price_list",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Price List",
+   "options": "Price List"
+  },
+  {
+   "fieldname": "item_price",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Item Price",
+   "options": "Item Price",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-11-16 16:41:14.730352",
+ "modified_by": "Administrator",
+ "module": "BDF Dairy",
+ "name": "Bulk Item Prices",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
