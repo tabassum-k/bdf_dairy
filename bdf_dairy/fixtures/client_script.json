@@ -1,0 +1,13 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Sales Order",
+  "enabled": 1,
+  "modified": "2024-11-24 17:33:00.463724",
+  "module": "BDF Dairy",
+  "name": "Restrict For Multiple Sales Invoice",
+  "script": "frappe.ui.form.on('Sales Order', {\n    refresh: function(frm) {\n        if(frm.doc.custom_sales_invoice){\n            cur_frm.page.remove_inner_button(('Sales Invoice'), ('Create'));\n        }\n\t}\n});\n",
+  "view": "Form"
+ }
+]
