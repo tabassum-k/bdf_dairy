@@ -1,21 +1,22 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "BIPC-.####",
- "creation": "2024-11-16 14:11:33.128734",
+ "autoname": "PLS-.####",
+ "creation": "2024-11-20 23:22:58.324303",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "item_code",
-  "column_break_hclvn",
+  "column_break_numtl",
   "item_name",
-  "column_break_l2q0f",
-  "type",
-  "section_break_cxlum",
-  "item_prices_list",
-  "amended_from"
+  "column_break_hgcp4",
+  "standard_price_list",
+  "column_break_jkier",
+  "standard_price_rate",
+  "section_break_51dsd",
+  "price_list_settings_changes"
  ],
  "fields": [
   {
@@ -24,61 +25,60 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Item Code",
-   "options": "Item"
+   "options": "Item",
+   "reqd": 1,
+   "unique": 1
   },
   {
-   "fieldname": "column_break_hclvn",
+   "fieldname": "column_break_numtl",
    "fieldtype": "Column Break"
   },
   {
    "fetch_from": "item_code.item_name",
    "fieldname": "item_name",
    "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "Item Name",
    "read_only": 1
   },
   {
-   "fieldname": "column_break_l2q0f",
+   "fieldname": "column_break_hgcp4",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "type",
-   "fieldtype": "Select",
+   "fieldname": "standard_price_list",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Type",
-   "options": "\nBoth\nBuying\nSelling"
+   "label": "Standard Price List",
+   "options": "Price List",
+   "reqd": 1
   },
   {
-   "fieldname": "section_break_cxlum",
+   "fieldname": "column_break_jkier",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "standard_price_rate",
+   "fieldtype": "Float",
+   "label": "Standard Price Rate"
+  },
+  {
+   "fieldname": "section_break_51dsd",
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "item_prices_list",
+   "fieldname": "price_list_settings_changes",
    "fieldtype": "Table",
-   "label": "Item Prices List",
-   "options": "Bulk Item Prices"
-  },
-  {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Bulk Item Price Change",
-   "print_hide": 1,
-   "read_only": 1,
-   "search_index": 1
+   "label": "Price List Settings Changes",
+   "options": "Price List Settings Changes"
   }
  ],
  "index_web_pages_for_search": 1,
- "is_submittable": 1,
  "links": [],
- "modified": "2024-11-16 16:40:26.749411",
+ "modified": "2024-11-21 10:21:03.622113",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
- "name": "Bulk Item Price Change",
+ "name": "Price List Settings",
  "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [

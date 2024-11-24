@@ -16,6 +16,7 @@ def execute(filters=None):
     for ack in ack_data:
         data.append({
             "id": ack.get('id'),
+            "date": ack.get('date'),
             "dcs": ack.get('dcs'),
             "ack_liter": ack.get('ack_liter', 0),
             "ack_kg": ack.get('ack_kg', 0),
@@ -23,7 +24,6 @@ def execute(filters=None):
             "ack_snf": ack.get('ack_snf', 0),
             "ack_kg_fat": ack.get('ack_kg_fat', 0),
             "ack_kg_snf": ack.get('ack_kg_snf', 0),
-            # Using 0 as a fallback if the field is None before rounding
             "diff_liter": format_diff(round(ack.get('diff_liter', 0) or 0, 3)),
             "diff_kg": format_diff(round(ack.get('diff_kg', 0) or 0, 3)),
             "diff_fat": format_diff(round(ack.get('diff_fat', 0) or 0, 3)),
@@ -38,6 +38,7 @@ def get_columns():
     # Define report columns with labels, fieldnames, fieldtypes, and widths
     return [
         {"label": "ID", "fieldname": "id", "fieldtype": "Link", "options": "Tanker Inward", "width": 120},
+        {"label": "Date", "fieldname": "date", "fieldtype": "Date", "width": 120},
         {"label": "DCS", "fieldname": "dcs", "fieldtype": "Link", "options": "Warehouse", "width": 120},
         {"label": "ACK LITER", "fieldname": "ack_liter", "fieldtype": "Float", "width": 120},
         {"label": "ACK KG", "fieldname": "ack_kg", "fieldtype": "Float", "width": 120},
@@ -58,6 +59,7 @@ def get_ack_data(filters):
     query = """
         SELECT
             ti.name AS id,
+            ti.tanker_inward_date AS date,
             ti.dcs,
             SUM(mrt.qty_in_liter) AS ack_liter,
             SUM(mrt.qty_in_kg) AS ack_kg,
