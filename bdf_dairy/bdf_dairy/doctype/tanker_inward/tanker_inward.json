@@ -38,14 +38,13 @@
   "kg_snf",
   "section_break_7yqb1",
   "milk_received_from_tanker",
+  "tanker_inward_quality_testing",
   "difference_of_dcs_and_tanker_milk_received",
   "warhouse_section",
   "tanker_warehouse",
   "column_break_sd49w",
   "plant_warehouse",
-  "amended_from",
-  "quality_testing_tab",
-  "tanker_inward_quality_testing"
+  "amended_from"
  ],
  "fields": [
   {
@@ -248,11 +247,6 @@
    "label": "Tanker Inward Date"
   },
   {
-   "fieldname": "quality_testing_tab",
-   "fieldtype": "Tab Break",
-   "label": "Quality Testing"
-  },
-  {
    "fieldname": "tanker_inward_quality_testing",
    "fieldtype": "Table",
    "label": "Tanker Inward Quality Testing",
@@ -267,7 +261,7 @@
    "link_fieldname": "custom_tanker_inward"
   }
  ],
- "modified": "2024-11-25 08:50:02.969441",
+ "modified": "2024-11-25 19:31:02.454714",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "Tanker Inward",

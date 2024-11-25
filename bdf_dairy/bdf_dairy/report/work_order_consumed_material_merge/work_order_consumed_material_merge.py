@@ -41,16 +41,19 @@ def get_data(report_filters):
     for key, values in wo_items.items():
         production_item, raw_material_item, raw_material_name = key
         if production_item == previous_production_item:
-            production_item_display = ''  # Set to blank if the same
+            production_item_display = '' 	
+            value_qty = 0
         else:
-            production_item_display = production_item  # Otherwise, use the current production item
+            production_item_display = production_item 
+            value_qty = values['qty'] 
         row = {
 			'name': '',  # You can choose to keep it blank or populate if necessary
 			'status': '',  # Similarly, handle other fields
 			'production_item': production_item_display,
+			'production_item_name': frappe.db.get_value("Item", production_item_display, 'item_name'),
 			'raw_material_item_code': raw_material_item,
 			'raw_material_name': raw_material_name,  # Populate if needed
-			'qty': values['qty'],
+			'qty': value_qty,
 			'produced_qty': values['produced_qty'],
 			'required_qty': values['required_qty'],
 			'transferred_qty': values['transferred_qty'],
@@ -132,6 +135,13 @@ def get_columns():
 		{
 			"label": _("Production Item"),
 			"fieldname": "production_item",
+			"fieldtype": "Link",
+			"options": "Item",
+			"width": 130,
+		},
+  		{
+			"label": _("Production Item Name"),
+			"fieldname": "production_item_name",
 			"fieldtype": "Link",
 			"options": "Item",
 			"width": 130,

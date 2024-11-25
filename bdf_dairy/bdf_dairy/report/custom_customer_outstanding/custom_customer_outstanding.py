@@ -75,7 +75,13 @@ class PartyLedgerSummaryReport:
 				"fieldname": "party",
 				"options": self.filters.party_type,
 				"width": 200,
-			}
+			},
+   			{
+				"label": _(f"{self.filters.party_type} Name"),
+				"fieldtype": "Data",
+				"fieldname": "party_name",
+				"width": 200,
+			},
 		]
 
 		if self.party_naming_by == "Naming Series":
@@ -200,7 +206,7 @@ class PartyLedgerSummaryReport:
 				frappe._dict(
 					{
 						"party": gle.party,
-						"party_name": gle.party_name,
+						"party_name": gle.party_name,  # Include party_name here
 						"opening_balance": 0,
 						"invoiced_amount": 0,
 						"paid_amount": 0,
@@ -210,12 +216,6 @@ class PartyLedgerSummaryReport:
 					}
 				),
 			)
-
-			if self.filters.party_type == "Customer":
-				self.party_data[gle.party].update({"territory": self.territories.get(gle.party)})
-				self.party_data[gle.party].update({"customer_group": self.customer_group.get(gle.party)})
-			else:
-				self.party_data[gle.party].update({"supplier_group": self.supplier_group.get(gle.party)})
 
 			amount = gle.get(invoice_dr_or_cr) - gle.get(reverse_dr_or_cr)
 			self.party_data[gle.party].closing_balance += amount
@@ -247,7 +247,9 @@ class PartyLedgerSummaryReport:
 				adjustments = self.party_adjustment_details.get(party, {})
 				for account in self.party_adjustment_accounts:
 					row["adj_" + scrub(account)] = adjustments.get(account, 0)
-				row.credit_limit = frappe.db.get_value("Customer Credit Limit", {'parent': party, 'company': self.filters.get("company")}, 'credit_limit')
+				row.credit_limit = frappe.db.get_value(
+					"Customer Credit Limit", {"parent": party, "company": self.filters.get("company")}, "credit_limit"
+				)
 				out.append(row)
 
 		return out
