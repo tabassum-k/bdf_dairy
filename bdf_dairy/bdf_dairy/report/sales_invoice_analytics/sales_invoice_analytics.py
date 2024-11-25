@@ -66,6 +66,10 @@ def execute(filters=None):
             {"label": "Item Name", "fieldname": "item_name", "fieldtype": "Data", "width": 140},
             {"label": "Item Group", "fieldname": "item_group", "fieldtype": "Link", "options": "Item Group", "width": 140},
         ]
+        columns.append({"label": "Total", "fieldname": "total_qty", "fieldtype": "Float", "width": 140})
+        if filters.type == "Quantity":
+            columns.append({"label": "Weight Per Unit", "fieldname": "weight_per_unit", "fieldtype": "Float", "width": 100})
+            columns.append({"label": "Total Wgt", "fieldname": "total_wgt", "fieldtype": "Float", "width": 140})
 
         # Fetch unique customers within the date range
         customers = frappe.get_list(
@@ -139,9 +143,9 @@ def execute(filters=None):
                 "width": 120,
             })
             
-        if filters.type == "Quantity":
-            columns.append({"label": "Weight Per Unit", "fieldname": "weight_per_unit", "fieldtype": "Float", "width": 100})
-            columns.append({"label": "Total Wgt", "fieldname": "total_wgt", "fieldtype": "Float", "width": 140})
+        # if filters.type == "Quantity":
+        #     columns.append({"label": "Weight Per Unit", "fieldname": "weight_per_unit", "fieldtype": "Float", "width": 100})
+        #     columns.append({"label": "Total Wgt", "fieldname": "total_wgt", "fieldtype": "Float", "width": 140})
             
         for item in item_data.values():
             total_qty = sum(value for key, value in item.items() if key.endswith('_qty'))
@@ -158,6 +162,10 @@ def execute(filters=None):
             {"label": "Item Name", "fieldname": "item_name", "fieldtype": "Data", "width": 140},
             {"label": "Item Group", "fieldname": "item_group", "fieldtype": "Link", "options": "Item Group", "width": 140},
         ]
+        columns.append({"label": "Total", "fieldname": "total", "fieldtype": "Float", "width": 120})
+        if filters.type == "Quantity":
+            columns.append({"label": "Weight Per Unit","fieldname": "weight_per_unit","fieldtype": "Float","width": 100})
+            columns.append({"label": "Total Weight", "fieldname": "total_weight", "fieldtype": "Float", "width": 120})
         date_ranges = get_period_date_ranges(filters)
         date_columns = []
         for start, end in date_ranges:
@@ -176,10 +184,10 @@ def execute(filters=None):
             })
 
         columns.extend(date_columns)
-        columns.append({"label": "Total", "fieldname": "total", "fieldtype": "Float", "width": 120})
-        if filters.type == "Quantity":
-            columns.append({"label": "Weight Per Unit","fieldname": "weight_per_unit","fieldtype": "Float","width": 100})
-            columns.append({"label": "Total Weight", "fieldname": "total_weight", "fieldtype": "Float", "width": 120})
+        # columns.append({"label": "Total", "fieldname": "total", "fieldtype": "Float", "width": 120})
+        # if filters.type == "Quantity":
+        #     columns.append({"label": "Weight Per Unit","fieldname": "weight_per_unit","fieldtype": "Float","width": 100})
+        #     columns.append({"label": "Total Weight", "fieldname": "total_weight", "fieldtype": "Float", "width": 120})
 
         query = f"""
             SELECT 

@@ -247,7 +247,7 @@ class PartyLedgerSummaryReport:
 				adjustments = self.party_adjustment_details.get(party, {})
 				for account in self.party_adjustment_accounts:
 					row["adj_" + scrub(account)] = adjustments.get(account, 0)
-				row.credit_limit = frappe.db.get_value("Customer Credit Limit", {'parent': party}, 'credit_limit')
+				row.credit_limit = frappe.db.get_value("Customer Credit Limit", {'parent': party, 'company': self.filters.get("company")}, 'credit_limit')
 				out.append(row)
 
 		return out
