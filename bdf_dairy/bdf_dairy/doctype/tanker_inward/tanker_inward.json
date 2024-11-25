@@ -259,6 +259,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "Tanker Loss - BDF",
    "fieldname": "loss_warehouse",
    "fieldtype": "Link",
    "label": "Loss Warehouse",
@@ -273,7 +274,7 @@
    "link_fieldname": "custom_tanker_inward"
   }
  ],
- "modified": "2024-11-25 21:04:00.260141",
+ "modified": "2024-11-25 21:44:54.541270",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "Tanker Inward",
