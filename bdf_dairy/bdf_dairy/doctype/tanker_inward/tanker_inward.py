@@ -5,7 +5,6 @@ class TankerInward(Document):
 	def on_submit(self):
 		diff_qty = 0
 		self.material_transfer_from_dcs_to_tanker()
-		
 		for diff in self.get('difference_of_dcs_and_tanker_milk_received', filters={'qty_in_liter': ['>', 0]}):
 			diff_qty += diff.qty_in_liter
 		for diff in self.get('difference_of_dcs_and_tanker_milk_received', filters={'qty_in_liter': ['<', 0]}):
