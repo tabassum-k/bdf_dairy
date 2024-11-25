@@ -143,10 +143,6 @@ def execute(filters=None):
                 "width": 120,
             })
             
-        # if filters.type == "Quantity":
-        #     columns.append({"label": "Weight Per Unit", "fieldname": "weight_per_unit", "fieldtype": "Float", "width": 100})
-        #     columns.append({"label": "Total Wgt", "fieldname": "total_wgt", "fieldtype": "Float", "width": 140})
-            
         for item in item_data.values():
             total_qty = sum(value for key, value in item.items() if key.endswith('_qty'))
             item["total_qty"] = total_qty
@@ -184,15 +180,11 @@ def execute(filters=None):
             })
 
         columns.extend(date_columns)
-        # columns.append({"label": "Total", "fieldname": "total", "fieldtype": "Float", "width": 120})
-        # if filters.type == "Quantity":
-        #     columns.append({"label": "Weight Per Unit","fieldname": "weight_per_unit","fieldtype": "Float","width": 100})
-        #     columns.append({"label": "Total Weight", "fieldname": "total_weight", "fieldtype": "Float", "width": 120})
 
         query = f"""
             SELECT 
                 si.customer,
-				si.customer_name,
+                si.customer_name,
                 sii.item_code,
                 sii.item_name,
                 i.item_group,
@@ -205,12 +197,27 @@ def execute(filters=None):
                 `tabSales Invoice` AS si ON sii.parent = si.name
             JOIN 
                 `tabItem` AS i ON sii.item_code = i.item_code
+            JOIN 
+                `tabCustomer` AS c ON si.customer = c.name
             WHERE 
                 si.docstatus = 1
                 AND si.company = %(company)s
                 AND si.posting_date BETWEEN %(from_date)s AND %(to_date)s
-            GROUP BY sii.item_code, si.posting_date
         """
+
+        # Apply additional filters
+        if filters.get("party"):
+            query += " AND si.customer IN %(customers)s"
+        if filters.get("item"):
+            query += " AND sii.item_code IN %(item)s"
+        if filters.get("item_group"):
+            query += " AND i.item_group IN %(item_group)s"
+        if filters.get("customer_group"):
+            query += " AND c.customer_group IN %(customer_group)s"
+
+        query += " GROUP BY sii.item_code, si.customer, si.posting_date"
+
+
         data = frappe.db.sql(query, filter_values, as_dict=True)
 
         for row in data:
