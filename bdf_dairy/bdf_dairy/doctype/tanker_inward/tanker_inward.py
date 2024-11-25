@@ -8,9 +8,13 @@ class TankerInward(Document):
 		
 		for diff in self.get('difference_of_dcs_and_tanker_milk_received', filters={'qty_in_liter': ['>', 0]}):
 			diff_qty += diff.qty_in_liter
+		for diff in self.get('difference_of_dcs_and_tanker_milk_received', filters={'qty_in_liter': ['<', 0]}):
+			diff_qty += diff.qty_in_liter
 		
 		if diff_qty > 0:
 			self.material_receipt_to_tanker(diff_qty)
+		if diff_qty < 0:
+			self.material_transfer_from_tanker_to_loss(abs(diff_qty))
 			
 		self.material_transfer_from_tanker_to_plant()
 
@@ -45,6 +49,18 @@ class TankerInward(Document):
 				"qty": itm.qty_in_liter,
 				"s_warehouse": self.tanker_warehouse,
 				"t_warehouse": self.plant_warehouse
+			})
+		self.create_stock_entry(stock_entry_type="Material Transfer", items=items)
+  
+	@frappe.whitelist()
+	def material_transfer_from_tanker_to_loss(self, qty):
+		items = []
+		for itm in self.get('milk_received_from_tanker'):
+			items.append({
+				"item_code": self.get_item(),
+				"qty": qty,
+				"s_warehouse": self.tanker_warehouse,
+				"t_warehouse": self.loss_warehouse
 			})
 		self.create_stock_entry(stock_entry_type="Material Transfer", items=items)
 

@@ -44,6 +44,8 @@
   "tanker_warehouse",
   "column_break_sd49w",
   "plant_warehouse",
+  "column_break_4tmbp",
+  "loss_warehouse",
   "amended_from"
  ],
  "fields": [
@@ -251,6 +253,16 @@
    "fieldtype": "Table",
    "label": "Tanker Inward Quality Testing",
    "options": "Tanker Inward Quality Testing"
+  },
+  {
+   "fieldname": "column_break_4tmbp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "loss_warehouse",
+   "fieldtype": "Link",
+   "label": "Loss Warehouse",
+   "options": "Warehouse"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -261,7 +273,7 @@
    "link_fieldname": "custom_tanker_inward"
   }
  ],
- "modified": "2024-11-25 19:31:02.454714",
+ "modified": "2024-11-25 21:04:00.260141",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "Tanker Inward",

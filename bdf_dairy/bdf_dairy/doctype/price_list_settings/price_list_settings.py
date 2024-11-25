@@ -14,5 +14,6 @@ class PriceListSettings(Document):
 		for pl in price_list:
 			if pl.name != self.standard_price_list:
 				self.append('price_list_settings_changes',{
-					'price_list': pl.name
+					'price_list': pl.name,
+					'rate': frappe.get_value('Item Price', {'item_code': self.item_code, 'price_list': pl.name}, 'price_list_rate')
 				})
