@@ -17,3 +17,12 @@ class PriceListSettings(Document):
 					'price_list': pl.name,
 					'rate': frappe.get_value('Item Price', {'item_code': self.item_code, 'price_list': pl.name}, 'price_list_rate')
 				})
+
+	def before_save(self):
+		for itm in self.get('price_list_settings_changes', filters={'change':['!=', 0]}):
+			itm.changed_rate = itm.rate + itm.change
+
+	def on_submit(self):
+		frappe.db.set_value("Item Price", {'item_code': self.item_code, 'price_list': self.standard_price_list}, 'price_list_rate', self.standard_price_rate)
+		for itm in self.get('price_list_settings_changes', filters={'change':['!=', 0]}):
+			frappe.db.set_value("Item Price", {'item_code': self.item_code, 'price_list': itm.price_list}, 'price_list_rate', itm.rate + itm.change)

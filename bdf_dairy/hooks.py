@@ -217,7 +217,7 @@ fixtures = [
     {
         "doctype": "Server Script",
         "filters": [
-            ["name", "in", ["Process Loss Handling For Work Order", "Restrict And Update Automatic Rate","Restrict To Create Multiple Sales Invoice"]],
+            ["name", "in", ["Process Loss Handling For Work Order","Restrict To Create Multiple Sales Invoice"]],
         ],
     },
     {

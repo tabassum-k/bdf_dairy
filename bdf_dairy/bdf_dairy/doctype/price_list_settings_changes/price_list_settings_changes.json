@@ -10,7 +10,9 @@
   "column_break_n0zyy",
   "rate",
   "column_break_yyeaz",
-  "change"
+  "change",
+  "column_break_mktzs",
+  "changed_rate"
  ],
  "fields": [
   {
@@ -39,12 +41,22 @@
   {
    "fieldname": "column_break_yyeaz",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_mktzs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "changed_rate",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Changed Rate"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-11-25 19:40:43.030492",
+ "modified": "2024-11-26 22:34:39.803649",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "Price List Settings Changes",

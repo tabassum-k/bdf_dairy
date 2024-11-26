@@ -16,7 +16,8 @@
   "column_break_jkier",
   "standard_price_rate",
   "section_break_51dsd",
-  "price_list_settings_changes"
+  "price_list_settings_changes",
+  "amended_from"
  ],
  "fields": [
   {
@@ -71,11 +72,22 @@
    "fieldtype": "Table",
    "label": "Price List Settings Changes",
    "options": "Price List Settings Changes"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Price List Settings",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   }
  ],
  "index_web_pages_for_search": 1,
+ "is_submittable": 1,
  "links": [],
- "modified": "2024-11-21 10:21:03.622113",
+ "modified": "2024-11-26 22:29:00.028527",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "Price List Settings",
