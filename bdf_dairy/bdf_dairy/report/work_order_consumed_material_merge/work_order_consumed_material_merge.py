@@ -43,9 +43,11 @@ def get_data(report_filters):
         if production_item == previous_production_item:
             production_item_display = '' 	
             value_qty = 0
+            prod_value_qty = 0
         else:
             production_item_display = production_item 
-            value_qty = values['qty'] 
+            value_qty = values['qty']
+            prod_value_qty = values['produced_qty']
         row = {
 			'name': '',  # You can choose to keep it blank or populate if necessary
 			'status': '',  # Similarly, handle other fields

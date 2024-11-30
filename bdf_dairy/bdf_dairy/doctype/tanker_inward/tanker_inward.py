@@ -2,19 +2,18 @@ import frappe
 from frappe.model.document import Document
 
 class TankerInward(Document):
-	def on_submit(self):
+	def before_submit(self):
 		diff_qty = 0
-		self.material_transfer_from_dcs_to_tanker()
 		for diff in self.get('difference_of_dcs_and_tanker_milk_received', filters={'qty_in_liter': ['>', 0]}):
 			diff_qty += diff.qty_in_liter
 		for diff in self.get('difference_of_dcs_and_tanker_milk_received', filters={'qty_in_liter': ['<', 0]}):
 			diff_qty += diff.qty_in_liter
 		
+		self.material_transfer_from_dcs_to_tanker()
 		if diff_qty > 0:
 			self.material_receipt_to_tanker(diff_qty)
 		if diff_qty < 0:
 			self.material_transfer_from_tanker_to_loss(abs(diff_qty))
-			
 		self.material_transfer_from_tanker_to_plant()
 
 	def material_receipt_to_tanker(self, qty):

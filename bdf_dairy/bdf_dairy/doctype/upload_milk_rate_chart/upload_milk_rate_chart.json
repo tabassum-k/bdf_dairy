@@ -1,0 +1,50 @@
+{
+ "actions": [],
+ "creation": "2024-11-29 19:47:05.735847",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "fat",
+  "snf",
+  "rate"
+ ],
+ "fields": [
+  {
+   "fieldname": "fat",
+   "fieldtype": "Float",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "label": "FAT%"
+  },
+  {
+   "fieldname": "rate",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Rate"
+  },
+  {
+   "fieldname": "snf",
+   "fieldtype": "Float",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "label": "SNF%"
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2024-11-30 15:54:33.349724",
+ "modified_by": "Administrator",
+ "module": "BDF Dairy",
+ "name": "Upload Milk Rate Chart",
+ "name_case": "Title Case",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "show_name_in_global_search": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
