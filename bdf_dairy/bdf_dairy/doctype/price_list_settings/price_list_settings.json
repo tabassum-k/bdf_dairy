@@ -9,6 +9,7 @@
  "engine": "InnoDB",
  "field_order": [
   "item_code",
+  "update_rate",
   "column_break_numtl",
   "item_name",
   "column_break_hgcp4",
@@ -16,8 +17,7 @@
   "column_break_jkier",
   "standard_price_rate",
   "section_break_51dsd",
-  "price_list_settings_changes",
-  "amended_from"
+  "price_list_settings_changes"
  ],
  "fields": [
   {
@@ -74,20 +74,14 @@
    "options": "Price List Settings Changes"
   },
   {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Price List Settings",
-   "print_hide": 1,
-   "read_only": 1,
-   "search_index": 1
+   "fieldname": "update_rate",
+   "fieldtype": "Button",
+   "label": "Update Rate"
   }
  ],
  "index_web_pages_for_search": 1,
- "is_submittable": 1,
  "links": [],
- "modified": "2024-11-26 22:29:00.028527",
+ "modified": "2024-12-02 22:05:45.075749",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "Price List Settings",

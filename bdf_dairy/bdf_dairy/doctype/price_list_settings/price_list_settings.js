@@ -18,6 +18,20 @@ frappe.ui.form.on('Price List Settings', {
 			})
 		}
 	},
+	update_rate: function(frm) {
+		frappe.confirm(
+			'Are you sure you want to update the rate?', 
+			() => {
+				frm.call({
+					method: 'update_rate',
+					doc: frm.doc
+				});
+			},
+			() => {
+				console.log('Rate update canceled');
+			}
+		);
+	},	
 	setup(frm){
 		set_filters(frm, 'standard_price_list', 'None',[['Price List', 'custom_is_standard', '=', 1]])
 	}
