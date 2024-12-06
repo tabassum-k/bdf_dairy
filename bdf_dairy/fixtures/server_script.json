@@ -19,12 +19,12 @@
   "allow_guest": 0,
   "api_method": null,
   "cron_format": null,
-  "disabled": 0,
+  "disabled": 1,
   "docstatus": 0,
   "doctype": "Server Script",
   "doctype_event": "Before Save",
   "event_frequency": "All",
-  "modified": "2024-11-22 23:24:34.681611",
+  "modified": "2024-11-26 22:38:21.971336",
   "module": "BDF Dairy",
   "name": "Restrict And Update Automatic Rate",
   "reference_doctype": "Item Price",
@@ -45,6 +45,22 @@
   "name": "Process Loss Handling For Work Order",
   "reference_doctype": "Stock Entry",
   "script": "if doc.purpose == \"Manufacture\":\n    stock_entry = frappe.new_doc(\"Stock Entry\")\n    stock_entry.stock_entry_type = \"Handling Loss\"\n    stock_entry_flag = False\n    for itm in doc.get('items', filters={'is_finished_item':1}):\n        finished_itm = itm.item_code\n        break\n    for itm in doc.items:\n        if itm.custom_handling_loss_qty > 0 and itm.s_warehouse:\n            stock_entry_flag = True\n            stock_entry.append('items', {\n                'item_code': itm.item_code, \n                's_warehouse': itm.s_warehouse,\n                'qty': itm.custom_handling_loss_qty,\n                'custom_finished_item': finished_itm\n            })\n    if stock_entry_flag:\n        stock_entry.insert()\n        stock_entry.submit()\n",
+  "script_type": "DocType Event"
+ },
+ {
+  "allow_guest": 0,
+  "api_method": null,
+  "cron_format": null,
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Server Script",
+  "doctype_event": "Before Save",
+  "event_frequency": "All",
+  "modified": "2024-12-06 17:02:29.036336",
+  "module": "BDF Dairy",
+  "name": "Minimum Order Quantity Validation",
+  "reference_doctype": "Sales Order",
+  "script": "customer_group = frappe.db.get_value(\"Customer\", doc.customer, \"customer_group\")\n\nmoq_list = frappe.db.sql(\"\"\"\n    SELECT moq.name\n    FROM `tabMinimum Order Quantity` AS moq\n    LEFT JOIN `tabMOQ Customer` AS moq_customer ON moq.name = moq_customer.parent\n    WHERE moq.customer_group = %s\n    AND (moq_customer.customer = %s OR moq_customer.customer IS NULL)\n\"\"\", (customer_group, doc.customer), as_dict=True)\n\nfor m in moq_list:\n    mo_doc = frappe.get_doc(\"Minimum Order Quantity\", m['name'])\n    moq_details = {(detail.item, detail.uom): detail for detail in mo_doc.moq_details}\n\n    for item in doc.items:\n        key = (item.item_code, item.uom)\n        if key in moq_details:\n            mo = moq_details[key]\n            if mo.qty > item.qty:\n                frappe.throw(f\"The {item.item_code} Item Must Have Greater Qty Than {mo.qty} With UOM of {item.uom}\")\n",
   "script_type": "DocType Event"
  }
 ]

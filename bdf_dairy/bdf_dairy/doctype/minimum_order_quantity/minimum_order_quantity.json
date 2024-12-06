@@ -1,0 +1,72 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "MOQ-.###",
+ "creation": "2024-12-04 22:18:06.874852",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "customer_group",
+  "column_break_elswl",
+  "customers",
+  "section_break_omfol",
+  "moq_details"
+ ],
+ "fields": [
+  {
+   "fieldname": "customer_group",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Customer Group",
+   "options": "Customer Group"
+  },
+  {
+   "fieldname": "column_break_elswl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "customers",
+   "fieldtype": "Table MultiSelect",
+   "label": "Customers",
+   "options": "MOQ Customer"
+  },
+  {
+   "fieldname": "section_break_omfol",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "moq_details",
+   "fieldtype": "Table",
+   "label": "MOQ Details",
+   "options": "MOQ Details"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-12-04 22:18:06.874852",
+ "modified_by": "Administrator",
+ "module": "BDF Dairy",
+ "name": "Minimum Order Quantity",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
