@@ -2,6 +2,39 @@
  {
   "docstatus": 0,
   "doctype": "Client Script",
+  "dt": "Purchase Invoice",
+  "enabled": 1,
+  "modified": "2024-12-06 22:05:37.722931",
+  "module": "BDF Dairy",
+  "name": "Purchase Invoice Item Wise Accepted Warehouse",
+  "script": "frappe.ui.form.on('Purchase Invoice Item', {\n    item_code: function (frm, cdt, cdn) {\n        let row = locals[cdt][cdn];\n        if (row.item_code) {\n            frappe.call({\n                method: \"bdf_dairy.bdf_dairy.doctype.price_list_settings.price_list_settings.get_item_warehouses\",\n                args: {\n                    item_group: row.item_group\n                },\n                callback: function (response) {\n                    if (response.message) {\n                        let warehouses = response.message.map(wh => wh.warehouse);\n                        if(warehouses){\n                            set_filters(frm, 'set_warehouse', null, [['Warehouse', 'name', 'in', warehouses]]);\n                        }\n                    }\n                }\n            });\n        }\n    }\n});\n\nfunction set_filters(frm, fieldname, parentfield, filters) {\n    if (parentfield) {\n        frm.set_query(fieldname, parentfield, function (doc, cdt, cdn) {\n            return {\n                filters: filters\n            };\n        });\n    } else {\n        frm.set_query(fieldname, function (doc) {\n            return {\n                filters: filters\n            };\n        });\n    }\n}\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Purchase Order",
+  "enabled": 1,
+  "modified": "2024-12-06 22:15:00.704812",
+  "module": "BDF Dairy",
+  "name": "Purchase Order Item Wise Accepted Warehouse",
+  "script": "frappe.ui.form.on('Purchase Order Item', {\n    item_code: function (frm, cdt, cdn) {\n        let row = locals[cdt][cdn];\n        if (row.item_code) {\n            // Fetch item_group using a server call\n            frappe.call({\n                method: \"frappe.client.get_value\",\n                args: {\n                    doctype: \"Item\",\n                    fieldname: \"item_group\",\n                    filters: { name: row.item_code }\n                },\n                callback: function (item_response) {\n                    if (item_response.message) {\n                        let item_group = item_response.message.item_group;\n                        // Fetch allowed warehouses for the item_group\n                        frappe.call({\n                            method: \"bdf_dairy.bdf_dairy.doctype.price_list_settings.price_list_settings.get_item_warehouses\",\n                            args: {\n                                item_group: item_group\n                            },\n                            callback: function (warehouse_response) {\n                                if (warehouse_response.message) {\n                                    let warehouses = warehouse_response.message.map(wh => wh.warehouse);\n                                    if (warehouses.length > 0) {\n                                        set_filters(frm, 'set_warehouse', null, [['Warehouse', 'name', 'in', warehouses]]);\n                                    }\n                                }\n                            }\n                        });\n                    }\n                }\n            });\n        }\n    }\n});\n\nfunction set_filters(frm, fieldname, parentfield, filters) {\n    if (parentfield) {\n        frm.set_query(fieldname, parentfield, function (doc, cdt, cdn) {\n            return {\n                filters: filters\n            };\n        });\n    } else {\n        frm.set_query(fieldname, function (doc) {\n            return {\n                filters: filters\n            };\n        });\n    }\n}\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Purchase Receipt",
+  "enabled": 1,
+  "modified": "2024-12-06 22:08:28.915995",
+  "module": "BDF Dairy",
+  "name": "Purchase Receipt Item Wise Accepted Warehouse",
+  "script": "frappe.ui.form.on('Purchase Receipt Item', {\n    item_code: function (frm, cdt, cdn) {\n        let row = locals[cdt][cdn];\n        if (row.item_code) {\n            frappe.call({\n                method: \"bdf_dairy.bdf_dairy.doctype.price_list_settings.price_list_settings.get_item_warehouses\",\n                args: {\n                    item_group: row.item_group\n                },\n                callback: function (response) {\n                    if (response.message) {\n                        let warehouses = response.message.map(wh => wh.warehouse);\n                        if(warehouses){\n                            set_filters(frm, 'set_warehouse', null, [['Warehouse', 'name', 'in', warehouses]]);\n                        }\n                    }\n                }\n            });\n        }\n    }\n});\n\nfunction set_filters(frm, fieldname, parentfield, filters) {\n    if (parentfield) {\n        frm.set_query(fieldname, parentfield, function (doc, cdt, cdn) {\n            return {\n                filters: filters\n            };\n        });\n    } else {\n        frm.set_query(fieldname, function (doc) {\n            return {\n                filters: filters\n            };\n        });\n    }\n}\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
   "dt": "Sales Order",
   "enabled": 1,
   "modified": "2024-11-24 17:33:00.463724",

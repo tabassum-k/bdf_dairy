@@ -217,13 +217,13 @@ fixtures = [
     {
         "doctype": "Server Script",
         "filters": [
-            ["name", "in", ["Process Loss Handling For Work Order", "Restrict To Create Multiple Sales Invoice", "Restrict And Update Automatic Rate", "Minimum Order Quantity Validation"]],
+            ["name", "in", ["Process Loss Handling For Work Order", "Restrict To Create Multiple Sales Invoice", "Restrict And Update Automatic Rate", "Sales Invoice Minimum Order Quantity Validation", "Minimum Order Quantity Validation"]],
         ],
     },
     {
         "doctype": "Client Script",
         "filters": [
-            ["name", "in", ["Restrict For Multiple Sales Invoice"]],
+            ["name", "in", ["Restrict For Multiple Sales Invoice", "Purchase Order Item Wise Accepted Warehouse", "Purchase Receipt Item Wise Accepted Warehouse", "Purchase Invoice Item Wise Accepted Warehouse"]],
         ],
     },
 ]

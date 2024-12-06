@@ -28,3 +28,18 @@ class PriceListSettings(Document):
 		for itm in self.get('price_list_settings_changes', filters={'change':['!=', 0]}):
 			frappe.db.set_value("Item Price", {'item_code': self.item_code, 'price_list': itm.price_list}, 'price_list_rate', itm.changed_rate)
 		frappe.msgprint("All Rate Price Updated Succesfully")
+  
+	@frappe.whitelist()
+	def get_latest_price_rate(self):
+		for i in self.price_list_settings_changes:
+			i.rate = frappe.get_value('Item Price', {'item_code': self.item_code, 'price_list': i.price_list}, 'price_list_rate')
+   
+   
+@frappe.whitelist()
+def get_item_warehouses(item_group):
+    return frappe.get_all(
+        "Item Accepted Warehouse",
+        filters={"parent": item_group},
+        fields=["warehouse"],
+        ignore_permissions=True
+    )

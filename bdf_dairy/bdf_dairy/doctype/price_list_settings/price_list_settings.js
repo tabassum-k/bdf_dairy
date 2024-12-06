@@ -2,6 +2,16 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Price List Settings', {
+	refresh(frm){
+		console.log("Call")
+		frm.call({
+			method: 'get_latest_price_rate',
+			doc: frm.doc,
+			callback: function(r){
+				frm.refresh_field('price_list_settings_changes')
+			}
+		})
+	},
 	standard_price_list: function(frm) {
 		if(frm.doc.standard_price_list && frm.doc.item_code){
 			frm.call({
