@@ -1,0 +1,173 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-08 09:12:14.503723",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "date",
+  "shift",
+  "column_break_wfm7v",
+  "route",
+  "warehouse",
+  "column_break_ipnz0",
+  "driver",
+  "vechical_number",
+  "column_break_ka4hp",
+  "company",
+  "section_break_e8v0e",
+  "sales_invoice",
+  "column_break_h0mun",
+  "stock_entry",
+  "section_break_fnz9f",
+  "gate_pass_items",
+  "sales_invoice_section",
+  "sales_invoice_details",
+  "stock_entry_section",
+  "stock_entry_details",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "shift",
+   "fieldtype": "Select",
+   "label": "Shift",
+   "options": "\nMorning\nEvening"
+  },
+  {
+   "fieldname": "route",
+   "fieldtype": "Link",
+   "label": "Route",
+   "options": "Route Master"
+  },
+  {
+   "fieldname": "column_break_wfm7v",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_ipnz0",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "warehouse",
+   "fieldtype": "Link",
+   "label": "Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "driver",
+   "fieldtype": "Link",
+   "label": "Driver",
+   "options": "Driver"
+  },
+  {
+   "fieldname": "vechical_number",
+   "fieldtype": "Data",
+   "label": "Vechical Number"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Markdown Editor",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "BDF Gate Pass",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "column_break_ka4hp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_e8v0e",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Table MultiSelect",
+   "label": "Sales Invoice",
+   "options": "BDF Gate Pass Sales Invoice"
+  },
+  {
+   "fieldname": "column_break_h0mun",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "stock_entry",
+   "fieldtype": "Table MultiSelect",
+   "label": "Stock Entry",
+   "options": "BDF Gate Pass Stock Entry"
+  },
+  {
+   "fieldname": "section_break_fnz9f",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "gate_pass_items",
+   "fieldtype": "Table",
+   "label": "Gate Pass Items",
+   "options": "BDF Gate Pass Items"
+  },
+  {
+   "fieldname": "sales_invoice_section",
+   "fieldtype": "Section Break",
+   "label": "Sales Invoice"
+  },
+  {
+   "fieldname": "sales_invoice_details",
+   "fieldtype": "Table",
+   "label": "Sales Invoice Details",
+   "options": "BDF Gate Pass Sales Invoice Details"
+  },
+  {
+   "fieldname": "stock_entry_section",
+   "fieldtype": "Section Break",
+   "label": "Stock Entry"
+  },
+  {
+   "fieldname": "stock_entry_details",
+   "fieldtype": "Table",
+   "label": "Stock Entry Details",
+   "options": "BDF Gate Pass Stock Entry Details"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2024-12-08 22:15:17.874339",
+ "modified_by": "Administrator",
+ "module": "BDF Dairy",
+ "name": "BDF Gate Pass",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

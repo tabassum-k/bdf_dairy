@@ -1,0 +1,104 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-08 22:12:27.889384",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "date",
+  "sales_invoice",
+  "column_break_v6tvv",
+  "customer",
+  "customer_name",
+  "column_break_os0aq",
+  "crate_type",
+  "crate_openning_qty",
+  "column_break_apoti",
+  "crate_issue_qty",
+  "crate_extra_qty",
+  "crate_balance_qty"
+ ],
+ "fields": [
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Sales Invoice",
+   "options": "Sales Invoice"
+  },
+  {
+   "fieldname": "column_break_v6tvv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Customer Name"
+  },
+  {
+   "fieldname": "column_break_os0aq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_apoti",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "crate_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Crate Type",
+   "options": "Crate Type"
+  },
+  {
+   "fieldname": "crate_openning_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Crate Openning Qty"
+  },
+  {
+   "fieldname": "crate_issue_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Crate Issue Qty"
+  },
+  {
+   "fieldname": "crate_extra_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Crate Extra Qty"
+  },
+  {
+   "fieldname": "crate_balance_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Crate Balance Qty"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-12-08 22:25:44.799346",
+ "modified_by": "Administrator",
+ "module": "BDF Dairy",
+ "name": "BDF Gate Pass Sales Invoice Details",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
