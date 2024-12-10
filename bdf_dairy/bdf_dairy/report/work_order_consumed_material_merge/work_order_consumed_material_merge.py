@@ -56,7 +56,7 @@ def get_data(report_filters):
 			'raw_material_item_code': raw_material_item,
 			'raw_material_name': raw_material_name,  # Populate if needed
 			'qty': value_qty,
-			'produced_qty': values['produced_qty'],
+			'produced_qty': prod_value_qty,
 			'required_qty': values['required_qty'],
 			'transferred_qty': values['transferred_qty'],
 			'consumed_qty': values['consumed_qty'],

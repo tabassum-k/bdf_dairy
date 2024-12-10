@@ -142,7 +142,7 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "Dairy section",
+   "default": "Dairy Section (Milk) - BDF",
    "fieldname": "plant_warehouse",
    "fieldtype": "Link",
    "label": "Plant Warehouse",
@@ -274,7 +274,7 @@
    "link_fieldname": "custom_tanker_inward"
   }
  ],
- "modified": "2024-12-06 22:41:44.835413",
+ "modified": "2024-12-09 21:10:51.936526",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "Tanker Inward",
