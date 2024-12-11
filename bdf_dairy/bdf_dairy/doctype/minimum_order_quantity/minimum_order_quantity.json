@@ -9,6 +9,7 @@
  "engine": "InnoDB",
  "field_order": [
   "customer_group",
+  "get_all_customer",
   "column_break_elswl",
   "customers",
   "section_break_omfol",
@@ -42,11 +43,16 @@
    "fieldtype": "Table",
    "label": "MOQ Details",
    "options": "MOQ Details"
+  },
+  {
+   "fieldname": "get_all_customer",
+   "fieldtype": "Button",
+   "label": "Get All Customer"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-12-04 22:18:06.874852",
+ "modified": "2024-12-11 19:23:02.913704",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "Minimum Order Quantity",

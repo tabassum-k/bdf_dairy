@@ -9,6 +9,14 @@ frappe.ui.form.on('Minimum Order Quantity', {
                 ['Customer', 'customer_group', '=', frm.doc.customer_group]
             ]);
         }
+    },
+    get_all_customer: function (frm) {
+        if (frm.doc.customer_group) {
+            frm.call({
+                method: "get_all_customer",
+                doc: frm.doc
+            })
+        }
     }
 });
 

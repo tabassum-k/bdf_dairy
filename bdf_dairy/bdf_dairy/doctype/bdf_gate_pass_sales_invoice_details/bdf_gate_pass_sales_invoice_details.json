@@ -12,7 +12,6 @@
   "customer",
   "customer_name",
   "column_break_os0aq",
-  "crate_type",
   "crate_openning_qty",
   "column_break_apoti",
   "crate_issue_qty",
@@ -58,13 +57,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "crate_type",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Crate Type",
-   "options": "Crate Type"
-  },
-  {
    "fieldname": "crate_openning_qty",
    "fieldtype": "Float",
    "in_list_view": 1,
@@ -79,6 +71,7 @@
   {
    "fieldname": "crate_extra_qty",
    "fieldtype": "Float",
+   "hidden": 1,
    "in_list_view": 1,
    "label": "Crate Extra Qty"
   },
@@ -92,7 +85,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-12-08 22:25:44.799346",
+ "modified": "2024-12-11 19:50:37.370533",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "BDF Gate Pass Sales Invoice Details",

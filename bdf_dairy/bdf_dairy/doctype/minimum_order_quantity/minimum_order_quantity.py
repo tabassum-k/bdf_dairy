@@ -6,6 +6,22 @@ from frappe.model.document import Document
 
 class MinimumOrderQuantity(Document):
 	def before_save(self):
+		for cust in self.customers:
+			duplicate_entry = frappe.db.sql("""
+				SELECT
+					customer, parent
+				FROM
+					`tabMOQ Customer`
+				WHERE
+					customer = %s
+				LIMIT 1
+			""", (cust.customer), as_dict=True)
+			if duplicate_entry:
+				frappe.throw(
+					f"Duplicate Entry Cannot Be Made For Customer: {cust.customer} with MOQ ID: {duplicate_entry[0]['parent']}"
+				)
+
+			
 		unique_combinations = set()
 		for moq in self.moq_details:
 			combination = (moq.item, moq.uom)
@@ -14,3 +30,8 @@ class MinimumOrderQuantity(Document):
 			
 			unique_combinations.add(combination)
 
+	@frappe.whitelist()
+	def get_all_customer(self):
+		self.customers.clear()
+		for cust in frappe.get_all("Customer", {'customer_group': self.customer_group}):
+			self.append('customers',{'customer': cust.name})

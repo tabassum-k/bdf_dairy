@@ -106,26 +106,6 @@
    "options": "Difference of DCS and Tanker Milk Received"
   },
   {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Tanker Inward",
-   "print_hide": 1,
-   "read_only": 1,
-   "search_index": 1
-  },
-  {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Tanker Inward",
-   "print_hide": 1,
-   "read_only": 1,
-   "search_index": 1
-  },
-  {
    "fieldname": "warhouse_section",
    "fieldtype": "Section Break",
    "label": "Warhouse"
@@ -264,6 +244,16 @@
    "fieldtype": "Link",
    "label": "Loss Warehouse",
    "options": "Warehouse"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Tanker Inward",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -274,7 +264,7 @@
    "link_fieldname": "custom_tanker_inward"
   }
  ],
- "modified": "2024-12-09 21:10:51.936526",
+ "modified": "2024-12-11 19:07:57.334774",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "Tanker Inward",
