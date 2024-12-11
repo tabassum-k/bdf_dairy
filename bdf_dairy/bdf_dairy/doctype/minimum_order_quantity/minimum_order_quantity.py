@@ -16,7 +16,7 @@ class MinimumOrderQuantity(Document):
 					customer = %s
 				LIMIT 1
 			""", (cust.customer), as_dict=True)
-			if duplicate_entry:
+			if duplicate_entry and duplicate_entry[0]['parent'] != self.name:
 				frappe.throw(
 					f"Duplicate Entry Cannot Be Made For Customer: {cust.customer} with MOQ ID: {duplicate_entry[0]['parent']}"
 				)
