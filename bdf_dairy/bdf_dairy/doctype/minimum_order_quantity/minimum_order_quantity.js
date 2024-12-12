@@ -5,9 +5,7 @@ frappe.ui.form.on('Minimum Order Quantity', {
     customer_group: function (frm) {
         if (frm.doc.customer_group) {
             console.log("Applying filter for customer group:", frm.doc.customer_group);
-            set_multiselect_filter(frm, 'customers', [
-                ['Customer', 'customer_group', '=', frm.doc.customer_group]
-            ]);
+            set_filters(frm, 'customer', 'customers',[['Customer', 'customer_group', '=', frm.doc.customer_group], ['Customer', 'disabled', '=', 0]])
         }
     },
     get_all_customer: function (frm) {
@@ -20,11 +18,18 @@ frappe.ui.form.on('Minimum Order Quantity', {
     }
 });
 
-function set_multiselect_filter(frm, fieldname, filters) {
-    frm.set_query(fieldname, function (doc) {
-        return {
-            filters: filters
-        };
-    });
+function set_filters(frm, DocTypeFieldName, DocTypeField, filters){
+    if(DocTypeField !== 'None'){
+        frm.set_query(DocTypeFieldName, DocTypeField, function(doc, cdt, cdn) {
+            return {
+                filters: filters
+            };
+        });
+    } else{
+        frm.set_query(DocTypeFieldName, function(doc) {
+            return {
+                filters: filters,
+            };
+        });
+    }
 }
-

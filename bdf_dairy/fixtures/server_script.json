@@ -24,11 +24,11 @@
   "doctype": "Server Script",
   "doctype_event": "Before Submit",
   "event_frequency": "All",
-  "modified": "2024-12-06 17:09:50.891146",
+  "modified": "2024-12-12 21:50:22.205679",
   "module": "BDF Dairy",
   "name": "Restrict To Create Multiple Sales Invoice",
   "reference_doctype": "Sales Invoice",
-  "script": "if not doc.is_return:\n    if doc.items[0].sales_order:\n        sales_inv = frappe.db.get_value(\"Sales Order\", doc.items[0].sales_order, 'custom_sales_invoice')\n        if sales_inv:\n            frappe.throw(f\"The Sales Invoice Is Already Submitted Against {doc.items[0].sales_order} This Sales Order\")\n        else:\n            frappe.db.set_value(\"Sales Order\", doc.items[0].sales_order, 'custom_sales_invoice', doc.name)",
+  "script": "if doc.items[0].sales_order and doc.is_return == 0:\n    sales_inv = frappe.db.get_value(\"Sales Order\", doc.items[0].sales_order, 'custom_sales_invoice')\n    if sales_inv:\n        frappe.throw(f\"The Sales Invoice Is Already Submitted Against {doc.items[0].sales_order} This Sales Order\")\n    else:\n        frappe.db.set_value(\"Sales Order\", doc.items[0].sales_order, 'custom_sales_invoice', doc.name)",
   "script_type": "DocType Event"
  },
  {

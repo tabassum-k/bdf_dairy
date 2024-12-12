@@ -74,6 +74,7 @@
    "options": "Price List Settings Changes"
   },
   {
+   "description": "Change The Standard Price Rate. And Save The Document Then Only Click This Button.",
    "fieldname": "update_rate",
    "fieldtype": "Button",
    "label": "Update Rate"
@@ -81,7 +82,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-12-02 22:05:45.075749",
+ "modified": "2024-12-12 21:54:18.795926",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "Price List Settings",

@@ -33,5 +33,5 @@ class MinimumOrderQuantity(Document):
 	@frappe.whitelist()
 	def get_all_customer(self):
 		self.customers.clear()
-		for cust in frappe.get_all("Customer", {'customer_group': self.customer_group}):
-			self.append('customers',{'customer': cust.name})
+		for cust in frappe.get_all("Customer", {'customer_group': self.customer_group, 'disabled': 0}):
+			self.append('customers',{'customer': cust.name, 'customer_name': frappe.db.get_value("Customer", cust.name, 'customer_name')})
