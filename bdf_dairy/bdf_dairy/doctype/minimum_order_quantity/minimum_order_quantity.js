@@ -4,7 +4,6 @@
 frappe.ui.form.on('Minimum Order Quantity', {
     customer_group: function (frm) {
         if (frm.doc.customer_group) {
-            console.log("Applying filter for customer group:", frm.doc.customer_group);
             set_filters(frm, 'customer', 'customers',[['Customer', 'customer_group', '=', frm.doc.customer_group], ['Customer', 'disabled', '=', 0]])
         }
     },

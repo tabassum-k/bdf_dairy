@@ -8,6 +8,7 @@
  "engine": "InnoDB",
  "field_order": [
   "date",
+  "stock_entry",
   "warehouse",
   "column_break_os0aq",
   "crate_type",
@@ -68,12 +69,19 @@
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Crate Balance Qty"
+  },
+  {
+   "fieldname": "stock_entry",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Stock Entry",
+   "options": "Stock Entry"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-12-11 19:52:08.390791",
+ "modified": "2024-12-13 20:05:20.715819",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "BDF Gate Pass Stock Entry Details",

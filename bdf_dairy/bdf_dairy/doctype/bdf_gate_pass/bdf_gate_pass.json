@@ -1,39 +1,45 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "naming_series:",
  "creation": "2024-12-08 09:12:14.503723",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "naming_series",
   "date",
-  "shift",
+  "vechical_number",
   "column_break_wfm7v",
   "route",
-  "warehouse",
+  "shift",
+  "get_sales_invoice",
   "column_break_ipnz0",
   "driver",
-  "vechical_number",
+  "transporter",
+  "get_stock_entry",
   "column_break_ka4hp",
   "company",
-  "section_break_e8v0e",
-  "sales_invoice",
-  "column_break_h0mun",
-  "stock_entry",
+  "transporter_name",
   "section_break_fnz9f",
   "gate_pass_items",
-  "sales_invoice_section",
+  "gate_pass_item",
+  "total_crate_qty",
+  "extra_crate",
+  "total_extra_crate",
   "sales_invoice_details",
-  "stock_entry_section",
   "stock_entry_details",
   "amended_from"
  ],
  "fields": [
   {
+   "default": "Today",
    "fieldname": "date",
    "fieldtype": "Date",
-   "label": "Date"
+   "in_list_view": 1,
+   "label": "Date",
+   "reqd": 1
   },
   {
    "fieldname": "shift",
@@ -62,12 +68,6 @@
    "options": "Company"
   },
   {
-   "fieldname": "warehouse",
-   "fieldtype": "Link",
-   "label": "Warehouse",
-   "options": "Warehouse"
-  },
-  {
    "fieldname": "driver",
    "fieldtype": "Link",
    "label": "Driver",
@@ -93,26 +93,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "section_break_e8v0e",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "sales_invoice",
-   "fieldtype": "Table MultiSelect",
-   "label": "Sales Invoice",
-   "options": "BDF Gate Pass Sales Invoice"
-  },
-  {
-   "fieldname": "column_break_h0mun",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "stock_entry",
-   "fieldtype": "Table MultiSelect",
-   "label": "Stock Entry",
-   "options": "BDF Gate Pass Stock Entry"
-  },
-  {
    "fieldname": "section_break_fnz9f",
    "fieldtype": "Section Break"
   },
@@ -123,35 +103,79 @@
    "options": "BDF Gate Pass Items"
   },
   {
-   "fieldname": "sales_invoice_section",
-   "fieldtype": "Section Break",
-   "label": "Sales Invoice"
-  },
-  {
    "fieldname": "sales_invoice_details",
    "fieldtype": "Table",
    "label": "Sales Invoice Details",
    "options": "BDF Gate Pass Sales Invoice Details"
   },
   {
-   "fieldname": "stock_entry_section",
-   "fieldtype": "Section Break",
-   "label": "Stock Entry"
-  },
-  {
    "fieldname": "stock_entry_details",
    "fieldtype": "Table",
    "label": "Stock Entry Details",
    "options": "BDF Gate Pass Stock Entry Details"
+  },
+  {
+   "fieldname": "transporter",
+   "fieldtype": "Link",
+   "label": "Transporter",
+   "options": "Supplier"
+  },
+  {
+   "fetch_from": "transporter.supplier_name",
+   "fieldname": "transporter_name",
+   "fieldtype": "Data",
+   "label": "Transporter Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "DD.-.MM.-.YYYY.##"
+  },
+  {
+   "fieldname": "gate_pass_item",
+   "fieldtype": "Table",
+   "label": "Gate Pass Items",
+   "options": "BDF Gate Pass Item"
+  },
+  {
+   "fieldname": "extra_crate",
+   "fieldtype": "Table",
+   "label": "Extra Crate",
+   "options": "BDF Gate Pass Extra Crate"
+  },
+  {
+   "fieldname": "total_crate_qty",
+   "fieldtype": "Int",
+   "label": "Total Crate Qty",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_extra_crate",
+   "fieldtype": "Int",
+   "label": "Total Extra Crate",
+   "read_only": 1
+  },
+  {
+   "fieldname": "get_sales_invoice",
+   "fieldtype": "Button",
+   "label": "Get Sales Invoice"
+  },
+  {
+   "fieldname": "get_stock_entry",
+   "fieldtype": "Button",
+   "label": "Get Stock Entry"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-12-08 22:15:17.874339",
+ "modified": "2024-12-14 23:27:02.772514",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "BDF Gate Pass",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {

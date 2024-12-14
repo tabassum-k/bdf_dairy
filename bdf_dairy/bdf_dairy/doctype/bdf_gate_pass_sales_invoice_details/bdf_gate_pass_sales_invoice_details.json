@@ -6,7 +6,6 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "date",
   "sales_invoice",
   "column_break_v6tvv",
   "customer",
@@ -20,11 +19,6 @@
  ],
  "fields": [
   {
-   "fieldname": "date",
-   "fieldtype": "Date",
-   "label": "Date"
-  },
-  {
    "fieldname": "sales_invoice",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -36,6 +30,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "fetch_from": "sales_invoice.customer",
    "fieldname": "customer",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -43,6 +38,7 @@
    "options": "Customer"
   },
   {
+   "fetch_from": "customer.customer_name",
    "fieldname": "customer_name",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -85,7 +81,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-12-11 19:50:37.370533",
+ "modified": "2024-12-14 20:46:33.304435",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "BDF Gate Pass Sales Invoice Details",

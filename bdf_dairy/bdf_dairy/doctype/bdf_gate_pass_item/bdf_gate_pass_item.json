@@ -1,7 +1,8 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2024-12-08 10:22:03.734401",
+ "creation": "2024-12-14 21:08:55.220764",
+ "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -16,10 +17,7 @@
   "total_weight",
   "column_break_hkfma",
   "crate_type",
-  "crate_qty",
-  "column_break_5cm8o",
-  "sales_invoice",
-  "stock_entry"
+  "crate_qty"
  ],
  "fields": [
   {
@@ -73,44 +71,27 @@
    "fieldtype": "Column Break"
   },
   {
+   "fieldname": "crate_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Crate Type",
+   "options": "Crate Type"
+  },
+  {
    "fieldname": "crate_qty",
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Crate Qty",
    "read_only": 1
-  },
-  {
-   "fieldname": "crate_type",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Crate Type",
-   "options": "Crate Type",
-   "read_only": 1
-  },
-  {
-   "fieldname": "column_break_5cm8o",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "sales_invoice",
-   "fieldtype": "Link",
-   "label": "Sales Invoice",
-   "options": "Sales Invoice"
-  },
-  {
-   "fieldname": "stock_entry",
-   "fieldtype": "Link",
-   "label": "Stock Entry",
-   "options": "Stock Entry"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-12-14 08:39:51.638492",
+ "modified": "2024-12-14 23:17:02.533783",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
- "name": "BDF Gate Pass Items",
+ "name": "BDF Gate Pass Item",
  "owner": "Administrator",
  "permissions": [],
  "sort_field": "modified",
