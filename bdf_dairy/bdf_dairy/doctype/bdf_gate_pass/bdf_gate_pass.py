@@ -26,7 +26,7 @@ class BDFGatePass(Document):
 			crate_ledger.balance = opening_qty +  si.crate_issue_qty
 			crate_ledger.bdf_gate_pass = self.name
 			crate_ledger.save()
-			frappe.db.set_value("Sales Invoice", si, 'gate_pass', 1)
+			frappe.db.set_value("Sales Invoice", si.sales_invoice, 'gate_pass', 1)
 
 		for st in self.stock_entry_details:
 			opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE warehouse = %s", (st.warehouse), as_dict = True)
@@ -42,7 +42,7 @@ class BDFGatePass(Document):
 			crate_ledger.balance = opening_qty +  si.crate_issue_qty
 			crate_ledger.bdf_gate_pass = self.name
 			crate_ledger.save()
-			frappe.db.set_value("Stock Entry", st, 'custom_gate_pass', 1)
+			frappe.db.set_value("Stock Entry", st.stock_entry, 'custom_gate_pass', 1)
 
 			
 	def validate(self):
