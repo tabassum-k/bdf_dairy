@@ -1,0 +1,58 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-17 21:08:44.600588",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "crate_type",
+  "column_break_mk7wo",
+  "quantity",
+  "column_break_ddqx1",
+  "return_quantity"
+ ],
+ "fields": [
+  {
+   "fieldname": "crate_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Crate Type",
+   "options": "Crate Type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_mk7wo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "quantity",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Quantity",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_ddqx1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "return_quantity",
+   "fieldtype": "Int",
+   "label": "Return Quantity"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-12-17 21:08:44.600588",
+ "modified_by": "Administrator",
+ "module": "BDF Dairy",
+ "name": "BDF Gate Pass Reconcilation Extra Crate",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

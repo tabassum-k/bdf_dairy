@@ -1,0 +1,102 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-17 21:02:50.358714",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "sales_invoice",
+  "customer",
+  "column_break_v6tvv",
+  "crate_openning_qty",
+  "customer_name",
+  "column_break_os0aq",
+  "crate_issue_qty",
+  "crate_return_qty",
+  "column_break_apoti",
+  "crate_extra_qty",
+  "crate_balance_qty"
+ ],
+ "fields": [
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Sales Invoice",
+   "options": "Sales Invoice"
+  },
+  {
+   "fetch_from": "sales_invoice.customer",
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "column_break_v6tvv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "crate_openning_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Crate Openning Qty",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "customer.customer_name",
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name"
+  },
+  {
+   "fieldname": "column_break_os0aq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "crate_issue_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Crate Issue Qty",
+   "read_only": 1
+  },
+  {
+   "fieldname": "crate_return_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Crate Return Qty"
+  },
+  {
+   "fieldname": "column_break_apoti",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "crate_extra_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Crate Extra Qty"
+  },
+  {
+   "fieldname": "crate_balance_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Crate Balance Qty",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-12-17 21:05:43.398054",
+ "modified_by": "Administrator",
+ "module": "BDF Dairy",
+ "name": "BDF Gate Pass Reconcilation Sales Invoice Details",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

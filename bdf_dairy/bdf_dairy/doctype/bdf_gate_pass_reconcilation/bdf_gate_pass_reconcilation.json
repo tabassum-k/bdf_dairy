@@ -1,0 +1,83 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "GPR-.####",
+ "creation": "2024-12-17 20:58:04.739005",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "gate_pass",
+  "sales_invoice_details",
+  "stock_entry_details",
+  "extra_crate",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "gate_pass",
+   "fieldtype": "Link",
+   "label": "Gate Pass",
+   "options": "BDF Gate Pass"
+  },
+  {
+   "fieldname": "sales_invoice_details",
+   "fieldtype": "Table",
+   "label": "Sales Invoice Details",
+   "options": "BDF Gate Pass Reconcilation Sales Invoice Details"
+  },
+  {
+   "fieldname": "stock_entry_details",
+   "fieldtype": "Table",
+   "label": "Stock Entry Details",
+   "options": "BDF Gate Pass Reconcilation Stock Entry Details"
+  },
+  {
+   "fieldname": "extra_crate",
+   "fieldtype": "Table",
+   "label": "Extra Crate",
+   "options": "BDF Gate Pass Reconcilation Extra Crate"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "BDF Gate Pass Reconcilation",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2024-12-18 08:05:54.531788",
+ "modified_by": "Administrator",
+ "module": "BDF Dairy",
+ "name": "BDF Gate Pass Reconcilation",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "select": 1,
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
