@@ -48,7 +48,7 @@ frappe.ui.form.on('BDF Gate Pass', {
 			get_query_filters: {
 				docstatus: 1,
 				stock_entry_type: "Material Transfer For Gate Pass",
-				cudtom_gate_pass: 0,
+				custom_gate_pass: 0,
 				posting_date: frm.doc.date
 			},
 			post_process: (source_docs, target_doc) => {
