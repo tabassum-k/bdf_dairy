@@ -39,7 +39,7 @@ class BDFGatePassReconcilation(Document):
 			crate_ledger.balance = opening_qty +  si.crate_extra_qty - si.crate_return_qty
 			crate_ledger.bdf_gate_pass = self.gate_pass
 			crate_ledger.save()
-
+		frappe.db.set_value("BDF Gate Pass", self.gate_pass, 'reconcilation_done', 1)
 
 	def before_save(self):
 		for si in self.sales_invoice_details:
