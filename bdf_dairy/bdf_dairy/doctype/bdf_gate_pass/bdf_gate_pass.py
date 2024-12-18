@@ -3,6 +3,7 @@ from frappe.model.document import Document
 from frappe.model.mapper import get_mapped_doc
 import math
 
+
 class BDFGatePass(Document):
     def on_cancel(self):
         for si in self.sales_invoice_details:
