@@ -9,12 +9,12 @@ frappe.ui.form.on('BDF Gate Pass', {
 		});
 	},
     refresh(frm){
-		// if (!frm.doc.__islocal) {
-		// 	frm.set_df_property("gate_pass_items", "hidden", 1);
-		// 	frm.set_df_property("gate_pass_item", "hidden", 0);
-		// }
+		if (!frm.doc.__islocal) {
+			frm.set_df_property("gate_pass_items", "hidden", 1);
+			frm.set_df_property("gate_pass_items_summary", "hidden", 0);
+		}
 		if (frm.doc.__islocal) {
-			frm.set_df_property("gate_pass_item", "hidden", 1);
+			frm.set_df_property("gate_pass_items_summary", "hidden", 1);
 		}
 	},
 	get_sales_invoice(frm){

@@ -7,20 +7,20 @@ import math
 class BDFGatePass(Document):
     def on_cancel(self):
         for si in self.sales_invoice_details:
-            frappe.db.set_value("Sales Invoice", si, 'gate_pass', 0)
+            frappe.db.set_value("Sales Invoice", si.sales_invoice, 'gate_pass', 0)
         for st in self.stock_entry_details:
-            frappe.db.set_value("Stock Entry", st, 'custom_gate_pass', 0)
+            frappe.db.set_value("Stock Entry", st.stock_entry, 'custom_gate_pass', 0)
 
     def on_submit(self):
         opening_qty = 0
         for si in self.sales_invoice_details:
-            opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE customer = %s", (si.customer), as_dict = True)
+            opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE customer = %s AND crate_type = %s", (si.customer, si.crate_type), as_dict = True)
             if len(opening) > 0:
                 opening_qty = opening[0]['balance']
             crate_ledger = frappe.new_doc("Crate Ledger")
             crate_ledger.customer = si.customer
             crate_ledger.route = self.route
-            crate_ledger.crate_type = "Blue Crate"
+            crate_ledger.crate_type = si.crate_type
             crate_ledger.opening = opening_qty
             crate_ledger.issue_qty = si.crate_issue_qty
             crate_ledger.return_qty = 0
@@ -30,7 +30,7 @@ class BDFGatePass(Document):
             frappe.db.set_value("Sales Invoice", si.sales_invoice, 'gate_pass', 1)
 
         for st in self.stock_entry_details:
-            opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE warehouse = %s", (st.warehouse), as_dict = True)
+            opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE warehouse = %s AND crate_type = %s", (st.warehouse, st.crate_type), as_dict = True)
             if len(opening) > 0:
                 opening_qty = opening[0]['balance']
             else:
@@ -38,25 +38,25 @@ class BDFGatePass(Document):
             crate_ledger = frappe.new_doc("Crate Ledger")
             crate_ledger.warehouse = st.warehouse
             crate_ledger.route = self.route
-            crate_ledger.crate_type = "Blue Crate"
+            crate_ledger.crate_type = st.crate_type
             crate_ledger.opening = opening_qty
-            crate_ledger.issue_qty = si.crate_issue_qty
+            crate_ledger.issue_qty = st.crate_issue_qty
             crate_ledger.return_qty = 0
-            crate_ledger.balance = opening_qty +  si.crate_issue_qty
+            crate_ledger.balance = opening_qty +  st.crate_issue_qty
             crate_ledger.bdf_gate_pass = self.name
             crate_ledger.save()
             frappe.db.set_value("Stock Entry", st.stock_entry, 'custom_gate_pass', 1)
 
-            
-    def validate(self):
+    def before_save(self):
         self.sales_invoice_details.clear()
         self.stock_entry_details.clear()
         self.gate_pass_items_summary.clear()
+        self.total_crate_summary.clear()
 
         sales_invoices = set()
         stock_entries = set()
         item_qty_sum = {}
-        total_crate_qty, total_extra_crate = 0, 0
+        total_crate_qty, total_extra_crate, challan_wise_crate = 0, 0, 0
 
         for i in self.gate_pass_items:
             if i.item_code:
@@ -74,63 +74,101 @@ class BDFGatePass(Document):
             if hasattr(item_doc, 'crate') and item_doc.crate:
                 for itm in item_doc.crate:
                     if itm.crate_quantity and itm.crate_type and count == 0:
-                        crate_qty = math.floor(it.item_qty / itm.crate_quantity)
+                        limit = frappe.db.get_value('Crate Type', itm.crate_type, 'limit')
+                        if limit:
+                            crate_qty = math.ceil(it.item_qty / itm.crate_quantity)
+                        else:
+                            crate_qty = math.floor(it.item_qty / itm.crate_quantity)
                         it.crate_type = itm.crate_type
                         it.crate_qty = crate_qty
-                        total_crate_qty += crate_qty
+                        challan_wise_crate += crate_qty
                         count = 1
 
         for item_code, total_qty in item_qty_sum.items():
-            weight_per_unit = 0
+            weight_per_unit, count = 0, 0
             matching_item = next((itm for itm in self.gate_pass_items if itm.item_code == item_code), None)
             if matching_item:
                 weight_per_unit = matching_item.weight_per_unit or 0
-            self.append('gate_pass_items_summary', {
-                'item_code': item_code,
-                'item_name': frappe.get_value("Item", item_code, 'item_name'),
-                'item_group': frappe.get_value("Item", item_code, 'item_group'),
-                'weight_per_unit': weight_per_unit,
-                'total_weight': total_qty * weight_per_unit,
-                'item_qty': total_qty,
+            item_doc = frappe.get_doc("Item", item_code)
+            if hasattr(item_doc, 'crate') and item_doc.crate:
+                for itm in item_doc.crate:
+                    if itm.crate_quantity and itm.crate_type and count == 0:
+                        limit = frappe.db.get_value('Crate Type', itm.crate_type, 'limit')
+                        if limit:
+                            crate_qty = math.ceil(total_qty / itm.crate_quantity)
+                        else:
+                            crate_qty = math.floor(total_qty / itm.crate_quantity)
+                        loose_qty = total_qty - (crate_qty * itm.crate_quantity)
+                        self.append('gate_pass_items_summary', {
+                            'item_code': item_code,
+                            'item_name': frappe.get_value("Item", item_code, 'item_name'),
+                            'item_group': frappe.get_value("Item", item_code, 'item_group'),
+                            'weight_per_unit': weight_per_unit,
+                            'total_weight': total_qty * weight_per_unit,
+                            'item_qty': total_qty,
+                            'crate_type': itm.crate_type,
+                            'crate_qty': crate_qty,
+                            'loose_qty': loose_qty if loose_qty > 0 else 0
+                        })
+                        total_crate_qty += crate_qty
+                        count = 1
+        
+        crate_types = {}
+        for items in self.get('gate_pass_items_summary', {'crate_qty': ['>', 0]}):
+            crate_types[items.crate_type] = crate_types.get(items.crate_type, 0) + items.crate_qty
+
+        for crate, qty in crate_types.items():
+            self.append('total_crate_summary', {
+                'crate_type': crate,
+                'quantity': qty
             })
+            
+
+        for si in sales_invoices:
+            opening_qty, issue_qty = 0, 0
+            crate_types = {}
+            for items in self.get('gate_pass_items', {'crate_qty': ['>', 0], 'sales_invoice': si}):
+                issue_qty += items.crate_qty
+                crate_types[items.crate_type] = crate_types.get(items.crate_type, 0) + items.crate_qty
+            for crate, qty in crate_types.items():
+                customer = frappe.get_value("Sales Invoice", si, 'customer')
+                opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE customer = %s AND crate_type = %s", (customer, crate), as_dict=True)
+                if len(opening) > 0:
+                    opening_qty = opening[0]['balance']
+                self.append('sales_invoice_details', {
+                    'sales_invoice': si,
+                    'customer': customer,
+                    'customer_name': frappe.get_value("Sales Invoice", si, 'customer_name'),
+                    'crate_openning_qty': opening_qty,
+                    'crate_issue_qty': qty,
+                    'crate_balance_qty': opening_qty + qty,
+                    'crate_type': crate
+                })
+
+        for st in stock_entries:
+            opening_qty, issue_qty = 0, 0
+            crate_types = {}
+            for items in self.get('gate_pass_items', {'crate_qty': ['>', 0], 'stock_entry': st}):
+                issue_qty += items.crate_qty
+                crate_types[items.crate_type] = crate_types.get(items.crate_type, 0) + items.crate_qty
+            for crate, qty in crate_types.items():
+                warehouse = frappe.get_value("Stock Entry Detail", {'parent': st}, 't_warehouse')
+                opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE warehouse = %s AND crate_type = %s", (warehouse, crate), as_dict=True)
+                if len(opening) > 0:
+                    opening_qty = opening[0]['balance']
+                self.append('stock_entry_details', {
+                    'stock_entry': st,
+                    'warehouse': warehouse,
+                    'crate_openning_qty': opening_qty,
+                    'crate_issue_qty': qty,
+                    'crate_balance_qty': opening_qty + qty,
+                    'crate_type': crate
+                })
 
         for extra in self.extra_crate:
             if extra.quantity > 0:
                 total_extra_crate += extra.quantity
-        
-        for si in sales_invoices:
-            opening_qty, issue_qty = 0, 0
-            for items in self.get('gate_pass_items', {'crate_qty':['>', 0], 'sales_invoice': si}):
-                issue_qty += items.crate_qty
-            customer =  frappe.get_value("Sales Invoice", si, 'customer')
-            opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE customer = %s", (customer), as_dict = True)
-            if len(opening) > 0:
-                opening_qty = opening[0]['balance']
-            self.append('sales_invoice_details', {
-                'sales_invoice': si,
-                'customer': customer,
-                'customer_name': frappe.get_value("Sales Invoice", si, 'customer_name'),
-                'crate_openning_qty': opening_qty,
-                'crate_issue_qty': issue_qty,
-                'crate_balance_qty': opening_qty + issue_qty
-            })
-
-        for st in stock_entries:
-            opening_qty, issue_qty = 0, 0
-            for items in self.get('gate_pass_items', {'crate_qty':['>', 0], 'stock_entry': st}):
-                issue_qty += items.crate_qty
-            warehouse = frappe.get_value("Stock Entry Detail", {'parent': st}, 't_warehouse')
-            opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE warehouse = %s", (warehouse), as_dict = True)
-            if len(opening) > 0:
-                opening_qty = opening[0]['balance']
-            self.append('stock_entry_details', {
-                'stock_entry': st,
-                'warehouse': warehouse,
-                'crate_openning_qty': opening_qty,
-                'crate_issue_qty': issue_qty,
-                'crate_balance_qty': opening_qty + issue_qty
-            })
-
+            
         self.total_crate_qty = total_crate_qty
         self.total_extra_crate = total_extra_crate
 

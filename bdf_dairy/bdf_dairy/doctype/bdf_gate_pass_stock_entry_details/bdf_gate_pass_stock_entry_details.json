@@ -7,7 +7,6 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "date",
   "stock_entry",
   "warehouse",
   "column_break_os0aq",
@@ -15,15 +14,12 @@
   "crate_openning_qty",
   "column_break_apoti",
   "crate_issue_qty",
+  "crate_return_qty",
+  "column_break_94n86",
   "crate_extra_qty",
   "crate_balance_qty"
  ],
  "fields": [
-  {
-   "fieldname": "date",
-   "fieldtype": "Date",
-   "label": "Date"
-  },
   {
    "fieldname": "warehouse",
    "fieldtype": "Link",
@@ -44,31 +40,33 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Crate Type",
-   "options": "Crate Type"
+   "options": "Crate Type",
+   "read_only": 1
   },
   {
    "fieldname": "crate_openning_qty",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Crate Openning Qty"
+   "label": "Openning Qty"
   },
   {
    "fieldname": "crate_issue_qty",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Crate Issue Qty"
+   "label": "Issue Qty"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "crate_extra_qty",
    "fieldtype": "Float",
-   "hidden": 1,
-   "label": "Crate Extra Qty"
+   "label": "Extra Qty",
+   "read_only": 1
   },
   {
    "fieldname": "crate_balance_qty",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Crate Balance Qty"
+   "label": "Balance Qty"
   },
   {
    "fieldname": "stock_entry",
@@ -76,12 +74,23 @@
    "in_list_view": 1,
    "label": "Stock Entry",
    "options": "Stock Entry"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "crate_return_qty",
+   "fieldtype": "Float",
+   "label": "Return Qty",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_94n86",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-12-13 20:05:20.715819",
+ "modified": "2024-12-19 23:17:30.950625",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "BDF Gate Pass Stock Entry Details",

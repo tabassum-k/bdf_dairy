@@ -24,14 +24,14 @@
   "transporter_name",
   "section_break_fnz9f",
   "gate_pass_items",
+  "gate_pass_items_summary",
+  "total_crate_summary",
   "total_crate_qty",
   "extra_crate",
   "total_extra_crate",
   "sales_invoice_details",
   "stock_entry_details",
-  "amended_from",
-  "gate_pass_summary_tab",
-  "gate_pass_items_summary"
+  "amended_from"
  ],
  "fields": [
   {
@@ -76,8 +76,9 @@
   },
   {
    "fieldname": "vechical_number",
-   "fieldtype": "Data",
-   "label": "Vechical Number"
+   "fieldtype": "Link",
+   "label": "Vechical Number",
+   "options": "Vehicle"
   },
   {
    "fieldname": "amended_from",
@@ -163,15 +164,17 @@
    "label": "Get Stock Entry"
   },
   {
-   "fieldname": "gate_pass_summary_tab",
-   "fieldtype": "Tab Break",
-   "label": "Gate Pass Summary"
-  },
-  {
    "fieldname": "gate_pass_items_summary",
    "fieldtype": "Table",
    "label": "Gate Pass Items Summary",
    "options": "BDF Gate Pass Item"
+  },
+  {
+   "fieldname": "total_crate_summary",
+   "fieldtype": "Table",
+   "label": "Total Crate Summary",
+   "options": "BDF Gate Pass Crate Qty",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -182,7 +185,7 @@
    "link_fieldname": "bdf_gate_pass"
   }
  ],
- "modified": "2024-12-16 21:11:52.369824",
+ "modified": "2024-12-19 22:52:47.618940",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "BDF Gate Pass",
