@@ -59,6 +59,15 @@ frappe.ui.form.on('BDF Gate Pass', {
 				}
 			},
 		});
+	},
+	calculate_extra_crate(frm){
+		frm.call({
+			'method': 'calculate_extra_crate',
+			doc: frm.doc,
+			callback: function(resp){
+				frm.refresh_field('calculate_extra_crate')
+			}
+		})
 	}
 });
 

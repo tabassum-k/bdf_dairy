@@ -27,10 +27,12 @@
   "gate_pass_items_summary",
   "total_crate_summary",
   "total_crate_qty",
+  "calculate_extra_crate",
   "extra_crate",
   "total_extra_crate",
   "sales_invoice_details",
   "stock_entry_details",
+  "challan_crate_summary",
   "amended_from"
  ],
  "fields": [
@@ -108,13 +110,15 @@
    "fieldname": "sales_invoice_details",
    "fieldtype": "Table",
    "label": "Sales Invoice Details",
-   "options": "BDF Gate Pass Sales Invoice Details"
+   "options": "BDF Gate Pass Sales Invoice Details",
+   "read_only": 1
   },
   {
    "fieldname": "stock_entry_details",
    "fieldtype": "Table",
    "label": "Stock Entry Details",
-   "options": "BDF Gate Pass Stock Entry Details"
+   "options": "BDF Gate Pass Stock Entry Details",
+   "read_only": 1
   },
   {
    "fieldname": "transporter",
@@ -175,6 +179,18 @@
    "label": "Total Crate Summary",
    "options": "BDF Gate Pass Crate Qty",
    "read_only": 1
+  },
+  {
+   "fieldname": "calculate_extra_crate",
+   "fieldtype": "Button",
+   "label": "Calculate Extra Crate"
+  },
+  {
+   "fieldname": "challan_crate_summary",
+   "fieldtype": "Table",
+   "label": "Challan Crate Summary",
+   "options": "BDF Gate Pass Challan Crate Summary",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -185,7 +201,7 @@
    "link_fieldname": "bdf_gate_pass"
   }
  ],
- "modified": "2024-12-19 22:52:47.618940",
+ "modified": "2024-12-22 20:39:02.112396",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "BDF Gate Pass",
