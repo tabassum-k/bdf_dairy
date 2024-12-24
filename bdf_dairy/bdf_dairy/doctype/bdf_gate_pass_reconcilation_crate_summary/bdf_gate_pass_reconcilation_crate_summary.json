@@ -1,0 +1,82 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-24 23:21:35.089006",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "crate_type",
+  "crate_openning_qty",
+  "column_break_os0aq",
+  "crate_issue_qty",
+  "crate_extra_qty",
+  "column_break_apoti",
+  "crate_return_qty",
+  "crate_balance_qty"
+ ],
+ "fields": [
+  {
+   "fieldname": "crate_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Crate Type",
+   "options": "Crate Type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "crate_openning_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Openning Qty"
+  },
+  {
+   "fieldname": "column_break_os0aq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "crate_issue_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Issue Qty"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "crate_extra_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Extra Qty",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_apoti",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "crate_return_qty",
+   "fieldtype": "Float",
+   "label": "Return Qty",
+   "read_only": 1
+  },
+  {
+   "fieldname": "crate_balance_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Balance Qty"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-12-24 23:21:35.089006",
+ "modified_by": "Administrator",
+ "module": "BDF Dairy",
+ "name": "BDF Gate Pass Reconcilation Crate Summary",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

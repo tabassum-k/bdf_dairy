@@ -12,6 +12,7 @@
   "sales_invoice_details",
   "stock_entry_details",
   "extra_crate",
+  "crate_summary",
   "amended_from"
  ],
  "fields": [
@@ -48,12 +49,19 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "crate_summary",
+   "fieldtype": "Table",
+   "label": "Crate Summary",
+   "options": "BDF Gate Pass Reconcilation Crate Summary",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-12-18 08:05:54.531788",
+ "modified": "2024-12-24 23:22:44.587284",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "BDF Gate Pass Reconcilation",

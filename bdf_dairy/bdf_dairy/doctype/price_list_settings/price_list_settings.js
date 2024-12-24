@@ -22,6 +22,8 @@ frappe.ui.form.on('Price List Settings', {
 				}
 			);
 		}).addClass('btn-primary')
+	},
+	onload(frm){
 		frm.call({
 			method: 'get_latest_price_rate',
 			doc: frm.doc,

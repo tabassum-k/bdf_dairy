@@ -22,6 +22,7 @@
   "column_break_ka4hp",
   "company",
   "transporter_name",
+  "reconcilation_done",
   "section_break_fnz9f",
   "gate_pass_items",
   "gate_pass_items_summary",
@@ -104,7 +105,8 @@
    "fieldname": "gate_pass_items",
    "fieldtype": "Table",
    "label": "Gate Pass Items",
-   "options": "BDF Gate Pass Items"
+   "options": "BDF Gate Pass Items",
+   "read_only": 1
   },
   {
    "fieldname": "sales_invoice_details",
@@ -171,7 +173,8 @@
    "fieldname": "gate_pass_items_summary",
    "fieldtype": "Table",
    "label": "Gate Pass Items Summary",
-   "options": "BDF Gate Pass Item"
+   "options": "BDF Gate Pass Item",
+   "read_only": 1
   },
   {
    "fieldname": "total_crate_summary",
@@ -191,6 +194,13 @@
    "label": "Challan Crate Summary",
    "options": "BDF Gate Pass Challan Crate Summary",
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "reconcilation_done",
+   "fieldtype": "Check",
+   "label": "Gate Pass Reconcilation Done",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -199,9 +209,13 @@
   {
    "link_doctype": "Crate Ledger",
    "link_fieldname": "bdf_gate_pass"
+  },
+  {
+   "link_doctype": "BDF Gate Pass Reconcilation",
+   "link_fieldname": "gate_pass"
   }
  ],
- "modified": "2024-12-22 20:39:02.112396",
+ "modified": "2024-12-24 23:42:17.438248",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "BDF Gate Pass",

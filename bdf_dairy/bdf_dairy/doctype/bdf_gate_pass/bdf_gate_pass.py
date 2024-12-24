@@ -7,9 +7,38 @@ import math
 class BDFGatePass(Document):
     def on_cancel(self):
         for si in self.sales_invoice_details:
+            opening_qty = 0
+            opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE customer = %s AND crate_type = %s", (si.customer, si.crate_type), as_dict = True)
+            if len(opening) > 0:
+                opening_qty = opening[0]['balance']
+            crate_ledger = frappe.new_doc("Crate Ledger")
+            crate_ledger.customer = si.customer
+            crate_ledger.route = self.route
+            crate_ledger.crate_type = si.crate_type
+            crate_ledger.opening = opening_qty
+            crate_ledger.issue_qty = 0
+            crate_ledger.return_qty = si.crate_issue_qty
+            crate_ledger.balance = opening_qty - si.crate_issue_qty
+            crate_ledger.bdf_gate_pass = self.name
+            crate_ledger.save()
             frappe.db.set_value("Sales Invoice", si.sales_invoice, 'gate_pass', 0)
         for st in self.stock_entry_details:
+            opening_qty = 0
+            opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE warehouse = %s AND crate_type = %s", (st.warehouse, st.crate_type), as_dict = True)
+            if len(opening) > 0:
+                opening_qty = opening[0]['balance']
+            crate_ledger = frappe.new_doc("Crate Ledger")
+            crate_ledger.warehouse = st.warehouse
+            crate_ledger.route = self.route
+            crate_ledger.crate_type = st.crate_type
+            crate_ledger.opening = opening_qty
+            crate_ledger.issue_qty = 0
+            crate_ledger.return_qty = st.crate_issue_qty
+            crate_ledger.balance = opening_qty - st.crate_issue_qty
+            crate_ledger.bdf_gate_pass = self.name
+            crate_ledger.save()
             frappe.db.set_value("Stock Entry", st.stock_entry, 'custom_gate_pass', 0)
+
 
     def on_submit(self):
         for si in self.sales_invoice_details:

@@ -6,7 +6,8 @@ frappe.ui.form.on('BDF Gate Pass Reconcilation', {
 		frm.set_query('gate_pass', function () {
 			return {
 				filters: {
-					'reconcilation_done': 0
+					'reconcilation_done': 0,
+					'docstatus': 1
 				}
 			}
 		});
