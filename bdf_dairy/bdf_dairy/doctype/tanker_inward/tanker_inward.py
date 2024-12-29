@@ -23,7 +23,8 @@ class TankerInward(Document):
 				"item_code": self.get_item(),
 				"qty": qty,
 				"t_warehouse": self.tanker_warehouse
-			}]
+			}],
+			user_remark = self.vehicle_number
 		)
 
 	@frappe.whitelist()
@@ -49,7 +50,7 @@ class TankerInward(Document):
 				"t_warehouse": self.plant_warehouse
 			})
 		self.create_stock_entry(stock_entry_type="Material Transfer", items=items)
-  
+
 	@frappe.whitelist()
 	def material_transfer_from_tanker_to_loss(self, qty):
 		items = []
@@ -62,7 +63,7 @@ class TankerInward(Document):
 			})
 		self.create_stock_entry(stock_entry_type="Material Transfer", items=items)
 
-	def create_stock_entry(self, stock_entry_type, items):
+	def create_stock_entry(self, stock_entry_type, items, user_remark = None):
 		try:
 			stock_entry = frappe.new_doc("Stock Entry")
 			stock_entry.stock_entry_type = stock_entry_type
@@ -70,6 +71,8 @@ class TankerInward(Document):
 			for item in items:
 				stock_entry.append("items", item)
 			stock_entry.custom_tanker_inward = self.name
+			if user_remark:
+				stock_entry.custom_user_remark = user_remark
 			stock_entry.insert()
 			stock_entry.submit()
 			frappe.db.commit()

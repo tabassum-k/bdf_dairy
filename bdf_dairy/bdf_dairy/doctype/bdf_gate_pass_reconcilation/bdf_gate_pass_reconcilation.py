@@ -5,6 +5,39 @@ import frappe
 from frappe.model.document import Document
 
 class BDFGatePassReconcilation(Document):
+	def on_cancel(self):
+		gate_pass = frappe.get_doc("BDF Gate Pass", self.gate_pass)
+		for si in self.sales_invoice_details:
+			opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE customer = %s", (si.customer), as_dict=True)
+			opening_qty = opening[0]['balance'] if len(opening) > 0 else 0
+			crate_ledger = frappe.new_doc("Crate Ledger")
+			crate_ledger.customer = si.customer
+			crate_ledger.route = gate_pass.route
+			crate_ledger.crate_type = "Blue Crate"
+			crate_ledger.opening = opening_qty
+			crate_ledger.issue_qty = -si.crate_extra_qty  # Reverse issued quantity
+			crate_ledger.return_qty = -si.crate_return_qty  # Reverse returned quantity
+			crate_ledger.balance = opening_qty - si.crate_extra_qty + si.crate_return_qty
+			crate_ledger.bdf_gate_pass = self.gate_pass
+			crate_ledger.save()
+
+		for st in self.stock_entry_details:
+			opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE warehouse = %s", (st.warehouse), as_dict=True)
+			opening_qty = opening[0]['balance'] if len(opening) > 0 else 0
+			crate_ledger = frappe.new_doc("Crate Ledger")
+			crate_ledger.warehouse = st.warehouse
+			crate_ledger.route = gate_pass.route
+			crate_ledger.crate_type = "Blue Crate"
+			crate_ledger.opening = opening_qty
+			crate_ledger.issue_qty = -st.crate_extra_qty  # Reverse issued quantity
+			crate_ledger.return_qty = -st.crate_return_qty  # Reverse returned quantity
+			crate_ledger.balance = opening_qty - st.crate_extra_qty + st.crate_return_qty
+			crate_ledger.bdf_gate_pass = self.gate_pass
+			crate_ledger.save()
+
+		frappe.db.set_value("BDF Gate Pass", self.gate_pass, 'reconcilation_done', 0)
+		frappe.db.commit()
+
 	def on_submit(self):
 		gate_pass = frappe.get_doc("BDF Gate Pass",self.gate_pass)	
 		for si in self.sales_invoice_details:
