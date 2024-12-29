@@ -215,7 +215,7 @@
    "link_fieldname": "gate_pass"
   }
  ],
- "modified": "2024-12-24 23:42:17.438248",
+ "modified": "2024-12-29 21:48:56.738995",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "BDF Gate Pass",
@@ -223,6 +223,8 @@
  "owner": "Administrator",
  "permissions": [
   {
+   "amend": 1,
+   "cancel": 1,
    "create": 1,
    "delete": 1,
    "email": 1,
@@ -231,7 +233,10 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "select": 1,
+   "set_user_permissions": 1,
    "share": 1,
+   "submit": 1,
    "write": 1
   }
  ],
