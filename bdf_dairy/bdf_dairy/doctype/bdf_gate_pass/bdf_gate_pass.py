@@ -89,6 +89,7 @@ class BDFGatePass(Document):
         total_opening_qty, total_issue_qty = {}, {}
 
         for i in self.gate_pass_items:
+            count = 0
             if i.item_code:
                 item_qty_sum[i.item_code] = item_qty_sum.get(i.item_code, 0) + (i.item_qty or 0)
             if i.sales_invoice:
