@@ -12,6 +12,7 @@
  ],
  "fields": [
   {
+   "allow_on_submit": 1,
    "fieldname": "crate_type",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -23,6 +24,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "quantity",
    "fieldtype": "Int",
    "in_list_view": 1,
@@ -32,7 +34,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-12-14 23:15:07.170510",
+ "modified": "2025-01-07 23:57:54.989326",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "BDF Gate Pass Extra Crate",

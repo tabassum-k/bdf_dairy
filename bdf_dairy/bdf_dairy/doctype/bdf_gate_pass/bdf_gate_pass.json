@@ -142,10 +142,12 @@
    "options": "DD.-.MM.-.YYYY.##"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "extra_crate",
    "fieldtype": "Table",
    "label": "Extra Crate",
-   "options": "BDF Gate Pass Extra Crate"
+   "options": "BDF Gate Pass Extra Crate",
+   "read_only_depends_on": "eval: doc.reconcilation_done;"
   },
   {
    "fieldname": "total_crate_qty",
@@ -154,6 +156,7 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total_extra_crate",
    "fieldtype": "Int",
    "label": "Total Extra Crate",
@@ -186,7 +189,8 @@
   {
    "fieldname": "calculate_extra_crate",
    "fieldtype": "Button",
-   "label": "Calculate Extra Crate"
+   "label": "Calculate Extra Crate",
+   "read_only_depends_on": "eval: doc.reconcilation_done;"
   },
   {
    "fieldname": "challan_crate_summary",
@@ -215,7 +219,7 @@
    "link_fieldname": "gate_pass"
   }
  ],
- "modified": "2024-12-29 21:48:56.738995",
+ "modified": "2025-01-08 00:01:00.664624",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "BDF Gate Pass",

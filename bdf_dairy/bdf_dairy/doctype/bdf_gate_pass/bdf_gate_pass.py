@@ -143,10 +143,21 @@ class BDFGatePass(Document):
                         })
                         total_crate_qty += crate_qty
                         count = 1
+            else:
+                self.append('gate_pass_items_summary', {
+                    'item_code': item_code,
+                    'item_name': frappe.get_value("Item", item_code, 'item_name'),
+                    'item_group': frappe.get_value("Item", item_code, 'item_group'),
+                    'weight_per_unit': weight_per_unit,
+                    'total_weight': total_qty * weight_per_unit,
+                    'item_qty': total_qty,
+                })
         
         crate_types = {}
-        for items in self.get('gate_pass_items_summary', {'crate_qty': ['>', 0]}):
-            crate_types[items.crate_type] = crate_types.get(items.crate_type, 0) + items.crate_qty
+        for items in self.get('gate_pass_items_summary'):
+            if items.crate_qty is not None and items.crate_qty > 0 and items.crate_type:
+                crate_types[items.crate_type] = crate_types.get(items.crate_type, 0) + items.crate_qty
+
 
         for crate, qty in crate_types.items():
             self.append('total_crate_summary', {

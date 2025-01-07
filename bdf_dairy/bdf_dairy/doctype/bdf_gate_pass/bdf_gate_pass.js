@@ -64,8 +64,11 @@ frappe.ui.form.on('BDF Gate Pass', {
 		frm.call({
 			'method': 'calculate_extra_crate',
 			doc: frm.doc,
+			freeze: true, // Freezes the screen with a loading indicator
+        	freeze_message: 'Calculating extra crate...',
 			callback: function(resp){
 				frm.refresh_field('calculate_extra_crate')
+				frm.reload_doc();
 			}
 		})
 	}
