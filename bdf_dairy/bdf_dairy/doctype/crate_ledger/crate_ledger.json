@@ -1,109 +1,116 @@
 {
-"actions": [],
-"allow_rename": 1,
-"creation": "2024-12-15 23:48:30.105937",
-"doctype": "DocType",
-"engine": "InnoDB",
-"field_order": [
-    "customer",
-    "opening",
-    "bdf_gate_pass",
-    "column_break_eduz",
-    "route",
-    "issue_qty",
-    "column_break_pxlw",
-    "warehouse",
-    "return_qty",
-    "column_break_gwgh",
-    "crate_type",
-    "balance"
-],
-"fields": [
-    {
-    "fieldname": "customer",
-    "fieldtype": "Link",
-    "label": "Customer",
-    "options": "Customer"
-    },
-    {
-    "fieldname": "opening",
-    "fieldtype": "Int",
-    "label": "Opening"
-    },
-    {
-    "fieldname": "column_break_eduz",
-    "fieldtype": "Column Break"
-    },
-    {
-    "fieldname": "route",
-    "fieldtype": "Link",
-    "label": "Route",
-    "options": "Route Master"
-    },
-    {
-    "fieldname": "column_break_pxlw",
-    "fieldtype": "Column Break"
-    },
-    {
-    "fieldname": "warehouse",
-    "fieldtype": "Link",
-    "label": "Warehouse",
-    "options": "Warehouse"
-    },
-    {
-    "fieldname": "column_break_gwgh",
-    "fieldtype": "Column Break"
-    },
-    {
-    "fieldname": "balance",
-    "fieldtype": "Int",
-    "label": "Balance"
-    },
-    {
-    "fieldname": "crate_type",
-    "fieldtype": "Link",
-    "label": "Crate Type",
-    "options": "Crate Type"
-    },
-    {
-    "fieldname": "issue_qty",
-    "fieldtype": "Int",
-    "label": "Issue Qty"
-    },
-    {
-    "fieldname": "return_qty",
-    "fieldtype": "Int",
-    "label": "Return Qty"
-    },
-    {
-    "fieldname": "bdf_gate_pass",
-    "fieldtype": "Link",
-    "label": "BDF Gate Pass",
-    "options": "BDF Gate Pass"
-    }
-],
-"index_web_pages_for_search": 1,
-"links": [],
-"modified": "2024-12-16 21:07:39.826133",
-"modified_by": "Administrator",
-"module": "BDF Dairy",
-"name": "Crate Ledger",
-"owner": "Administrator",
-"permissions": [
-    {
-    "create": 1,
-    "delete": 1,
-    "email": 1,
-    "export": 1,
-    "print": 1,
-    "read": 1,
-    "report": 1,
-    "role": "System Manager",
-    "share": 1,
-    "write": 1
-    }
-],
-"sort_field": "modified",
-"sort_order": "DESC",
-"states": []
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-12-15 23:48:30.105937",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "customer",
+  "opening",
+  "bdf_gate_pass",
+  "column_break_eduz",
+  "route",
+  "issue_qty",
+  "crate_return",
+  "column_break_pxlw",
+  "warehouse",
+  "return_qty",
+  "column_break_gwgh",
+  "crate_type",
+  "balance"
+ ],
+ "fields": [
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "opening",
+   "fieldtype": "Int",
+   "label": "Opening"
+  },
+  {
+   "fieldname": "column_break_eduz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "route",
+   "fieldtype": "Link",
+   "label": "Route",
+   "options": "Route Master"
+  },
+  {
+   "fieldname": "column_break_pxlw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "warehouse",
+   "fieldtype": "Link",
+   "label": "Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "column_break_gwgh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "balance",
+   "fieldtype": "Int",
+   "label": "Balance"
+  },
+  {
+   "fieldname": "crate_type",
+   "fieldtype": "Link",
+   "label": "Crate Type",
+   "options": "Crate Type"
+  },
+  {
+   "fieldname": "issue_qty",
+   "fieldtype": "Int",
+   "label": "Issue Qty"
+  },
+  {
+   "fieldname": "return_qty",
+   "fieldtype": "Int",
+   "label": "Return Qty"
+  },
+  {
+   "fieldname": "bdf_gate_pass",
+   "fieldtype": "Link",
+   "label": "BDF Gate Pass",
+   "options": "BDF Gate Pass"
+  },
+  {
+   "fieldname": "crate_return",
+   "fieldtype": "Link",
+   "label": "Crate Return",
+   "options": "Crate Return"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-01-08 00:17:30.078515",
+ "modified_by": "Administrator",
+ "module": "BDF Dairy",
+ "name": "Crate Ledger",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
 }

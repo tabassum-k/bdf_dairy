@@ -8,7 +8,13 @@ class BDFGatePass(Document):
     def on_cancel(self):
         for si in self.sales_invoice_details:
             opening_qty = 0
-            opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE customer = %s AND crate_type = %s", (si.customer, si.crate_type), as_dict = True)
+            opening = frappe.db.sql("""
+                SELECT balance 
+                FROM `tabCrate Ledger` 
+                WHERE customer = %s AND crate_type = %s 
+                ORDER BY creation DESC 
+                LIMIT 1
+            """, (si.customer, si.crate_type), as_dict=True)
             if len(opening) > 0:
                 opening_qty = opening[0]['balance']
             crate_ledger = frappe.new_doc("Crate Ledger")
@@ -24,7 +30,14 @@ class BDFGatePass(Document):
             frappe.db.set_value("Sales Invoice", si.sales_invoice, 'gate_pass', 0)
         for st in self.stock_entry_details:
             opening_qty = 0
-            opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE warehouse = %s AND crate_type = %s", (st.warehouse, st.crate_type), as_dict = True)
+            # opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE warehouse = %s AND crate_type = %s", (st.warehouse, st.crate_type), as_dict = True)
+            opening = frappe.db.sql("""
+                SELECT balance 
+                FROM `tabCrate Ledger` 
+                WHERE warehouse = %s AND crate_type = %s 
+                ORDER BY creation DESC 
+                LIMIT 1
+            """, (st.warehouse, st.crate_type), as_dict=True)
             if len(opening) > 0:
                 opening_qty = opening[0]['balance']
             crate_ledger = frappe.new_doc("Crate Ledger")
@@ -43,7 +56,13 @@ class BDFGatePass(Document):
     def on_submit(self):
         for si in self.sales_invoice_details:
             opening_qty = 0
-            opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE customer = %s AND crate_type = %s", (si.customer, si.crate_type), as_dict = True)
+            opening = frappe.db.sql("""
+                SELECT balance 
+                FROM `tabCrate Ledger` 
+                WHERE customer = %s AND crate_type = %s 
+                ORDER BY creation DESC 
+                LIMIT 1
+            """, (si.customer, si.crate_type), as_dict=True)
             if len(opening) > 0:
                 opening_qty = opening[0]['balance']
             crate_ledger = frappe.new_doc("Crate Ledger")
@@ -60,7 +79,13 @@ class BDFGatePass(Document):
 
         for st in self.stock_entry_details:
             opening_qty = 0
-            opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE warehouse = %s AND crate_type = %s", (st.warehouse, st.crate_type), as_dict = True)
+            opening = frappe.db.sql("""
+                SELECT balance 
+                FROM `tabCrate Ledger` 
+                WHERE warehouse = %s AND crate_type = %s 
+                ORDER BY creation DESC 
+                LIMIT 1
+            """, (st.warehouse, st.crate_type), as_dict=True)
             if len(opening) > 0:
                 opening_qty = opening[0]['balance']
             crate_ledger = frappe.new_doc("Crate Ledger")

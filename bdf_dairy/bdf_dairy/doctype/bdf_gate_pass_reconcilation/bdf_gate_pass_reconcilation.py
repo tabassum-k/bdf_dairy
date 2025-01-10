@@ -8,29 +8,41 @@ class BDFGatePassReconcilation(Document):
 	def on_cancel(self):
 		gate_pass = frappe.get_doc("BDF Gate Pass", self.gate_pass)
 		for si in self.sales_invoice_details:
-			opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE customer = %s", (si.customer), as_dict=True)
+			opening = frappe.db.sql("""
+				SELECT balance 
+				FROM `tabCrate Ledger` 
+				WHERE customer = %s AND crate_type = %s 
+				ORDER BY creation DESC 
+				LIMIT 1
+			""", (si.customer, si.crate_type), as_dict=True)
 			opening_qty = opening[0]['balance'] if len(opening) > 0 else 0
 			crate_ledger = frappe.new_doc("Crate Ledger")
 			crate_ledger.customer = si.customer
 			crate_ledger.route = gate_pass.route
-			crate_ledger.crate_type = "Blue Crate"
+			crate_ledger.crate_type = si.crate_type
 			crate_ledger.opening = opening_qty
-			crate_ledger.issue_qty = -si.crate_extra_qty  # Reverse issued quantity
-			crate_ledger.return_qty = -si.crate_return_qty  # Reverse returned quantity
+			crate_ledger.issue_qty = -si.crate_extra_qty  
+			crate_ledger.return_qty = -si.crate_return_qty  
 			crate_ledger.balance = opening_qty - si.crate_extra_qty + si.crate_return_qty
 			crate_ledger.bdf_gate_pass = self.gate_pass
 			crate_ledger.save()
 
 		for st in self.stock_entry_details:
-			opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE warehouse = %s", (st.warehouse), as_dict=True)
+			opening = frappe.db.sql("""
+				SELECT balance 
+				FROM `tabCrate Ledger` 
+				WHERE warehouse = %s AND crate_type = %s 
+				ORDER BY creation DESC 
+				LIMIT 1
+			""", (st.warehouse, st.crate_type), as_dict=True)
 			opening_qty = opening[0]['balance'] if len(opening) > 0 else 0
 			crate_ledger = frappe.new_doc("Crate Ledger")
 			crate_ledger.warehouse = st.warehouse
 			crate_ledger.route = gate_pass.route
-			crate_ledger.crate_type = "Blue Crate"
+			crate_ledger.crate_type = si.crate_type
 			crate_ledger.opening = opening_qty
-			crate_ledger.issue_qty = -st.crate_extra_qty  # Reverse issued quantity
-			crate_ledger.return_qty = -st.crate_return_qty  # Reverse returned quantity
+			crate_ledger.issue_qty = st.crate_extra_qty  # Reverse issued quantity
+			crate_ledger.return_qty = st.crate_return_qty  # Reverse returned quantity
 			crate_ledger.balance = opening_qty - st.crate_extra_qty + st.crate_return_qty
 			crate_ledger.bdf_gate_pass = self.gate_pass
 			crate_ledger.save()
@@ -41,7 +53,13 @@ class BDFGatePassReconcilation(Document):
 	def on_submit(self):
 		gate_pass = frappe.get_doc("BDF Gate Pass",self.gate_pass)	
 		for si in self.sales_invoice_details:
-			opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE customer = %s", (si.customer), as_dict = True)
+			opening = frappe.db.sql("""
+				SELECT balance 
+				FROM `tabCrate Ledger` 
+				WHERE customer = %s AND crate_type = %s 
+				ORDER BY creation DESC 
+				LIMIT 1
+			""", (si.customer, si.crate_type), as_dict=True)
 			if len(opening) > 0:
 				opening_qty = opening[0]['balance']
 			else:
@@ -49,23 +67,29 @@ class BDFGatePassReconcilation(Document):
 			crate_ledger = frappe.new_doc("Crate Ledger")
 			crate_ledger.customer = si.customer
 			crate_ledger.route = gate_pass.route
-			crate_ledger.crate_type = "Blue Crate"
+			crate_ledger.crate_type = si.crate_type
 			crate_ledger.opening = opening_qty
 			crate_ledger.issue_qty = si.crate_extra_qty
 			crate_ledger.return_qty = si.crate_return_qty
-			crate_ledger.balance = opening_qty +  si.crate_extra_qty - si.crate_return_qty
+			crate_ledger.balance = opening_qty + si.crate_extra_qty - si.crate_return_qty
 			crate_ledger.bdf_gate_pass = self.gate_pass
 			crate_ledger.save()
 
 		for st in self.stock_entry_details:
 			opening_qty = 0	
-			opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE warehouse = %s", (st.warehouse), as_dict = True)
+			opening = frappe.db.sql("""
+				SELECT balance 
+				FROM `tabCrate Ledger` 
+				WHERE warehouse = %s AND crate_type = %s 
+				ORDER BY creation DESC 
+				LIMIT 1
+			""", (st.warehouse, st.crate_type), as_dict=True)
 			if len(opening) > 0:
 				opening_qty = opening[0]['balance']
 			crate_ledger = frappe.new_doc("Crate Ledger")
 			crate_ledger.warehouse = st.warehouse
 			crate_ledger.route = gate_pass.route
-			crate_ledger.crate_type = "Blue Crate"
+			crate_ledger.crate_type = si.crate_type
 			crate_ledger.opening = opening_qty
 			crate_ledger.issue_qty = si.crate_extra_qty
 			crate_ledger.return_qty = si.crate_return_qty
@@ -165,7 +189,13 @@ class BDFGatePassReconcilation(Document):
 		gate_pass = frappe.get_doc("BDF Gate Pass",self.gate_pass)
 		for st in gate_pass.stock_entry_details:
 			opening_qty = 0
-			opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE warehouse = %s AND crate_type = %s LIMIT 1", (st.warehouse, st.crate_type), as_dict = True)
+			opening = frappe.db.sql("""
+				SELECT balance 
+				FROM `tabCrate Ledger` 
+				WHERE warehouse = %s AND crate_type = %s 
+				ORDER BY creation DESC 
+				LIMIT 1
+			""", (st.warehouse, st.crate_type), as_dict=True)
 			if len(opening) > 0:
 				opening_qty = opening[0]['balance'] - st.crate_issue_qty
 			self.append('stock_entry_details',{
@@ -179,7 +209,14 @@ class BDFGatePassReconcilation(Document):
 
 		for si in gate_pass.sales_invoice_details:
 			opening_qty = 0
-			opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE customer = %s AND crate_type = %s LIMIT 1", (si.customer, si.crate_type), as_dict = True)
+			opening = frappe.db.sql("""
+				SELECT balance 
+				FROM `tabCrate Ledger` 
+				WHERE customer = %s AND crate_type = %s 
+				ORDER BY creation DESC 
+				LIMIT 1
+			""", (si.customer, si.crate_type), as_dict=True)
+			frappe.msgprint(str(opening[0]['balance']))
 			if len(opening) > 0:
 				opening_qty = opening[0]['balance'] - si.crate_issue_qty
 			self.append('sales_invoice_details', {

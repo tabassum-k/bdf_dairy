@@ -73,15 +73,3 @@ frappe.ui.form.on('BDF Gate Pass', {
 		})
 	}
 });
-
-function method_call(frm, method, list_of_table_remove = null) {
-    list_of_table_remove = list_of_table_remove || [];
-    list_of_table_remove.forEach(function(table_name) {
-        frm.clear_table(table_name);
-        frm.refresh_field(table_name);
-    });
-    frm.call({
-        method: method,
-        doc: frm.doc,
-    });
-}

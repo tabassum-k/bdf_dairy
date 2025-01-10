@@ -1,0 +1,134 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-01-08 00:18:34.199902",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "bdf_gate_pass",
+  "crate_type",
+  "column_break_zwj6z",
+  "customer",
+  "customer_name",
+  "column_break_80tcs",
+  "opening_quantity",
+  "route",
+  "column_break_duwwf",
+  "return_quantity",
+  "balance_quantity",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "bdf_gate_pass",
+   "fieldtype": "Link",
+   "label": "BDF Gate Pass",
+   "options": "BDF Gate Pass"
+  },
+  {
+   "fieldname": "column_break_zwj6z",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "customer.customer_name",
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "opening_quantity",
+   "fieldtype": "Float",
+   "label": "Opening Quantity",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_80tcs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "return_quantity",
+   "fieldtype": "Float",
+   "label": "Return Quantity"
+  },
+  {
+   "fieldname": "balance_quantity",
+   "fieldtype": "Float",
+   "label": "Balance Quantity",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Crate Return",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "crate_type",
+   "fieldtype": "Link",
+   "label": "Crate Type",
+   "options": "Crate Type"
+  },
+  {
+   "fieldname": "column_break_duwwf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "bdf_gate_pass.route",
+   "fieldname": "route",
+   "fieldtype": "Link",
+   "label": "Route",
+   "options": "Route Master",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [
+  {
+   "link_doctype": "Crate Ledger",
+   "link_fieldname": "crate_return"
+  }
+ ],
+ "modified": "2025-01-08 23:29:59.709352",
+ "modified_by": "Administrator",
+ "module": "BDF Dairy",
+ "name": "Crate Return",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "select": 1,
+   "set_user_permissions": 1,
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
