@@ -7,9 +7,11 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "return_by",
   "bdf_gate_pass",
-  "crate_type",
   "column_break_zwj6z",
+  "crate_type",
+  "warehouse",
   "customer",
   "customer_name",
   "column_break_80tcs",
@@ -32,6 +34,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "depends_on": "eval: doc.return_by == \"Customer\";",
    "fetch_from": "customer.customer_name",
    "fieldname": "customer_name",
    "fieldtype": "Data",
@@ -39,12 +42,12 @@
    "read_only": 1
   },
   {
+   "depends_on": "eval: doc.return_by == \"Customer\";",
    "fieldname": "customer",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Customer",
-   "options": "Customer",
-   "reqd": 1
+   "options": "Customer"
   },
   {
    "fieldname": "opening_quantity",
@@ -94,6 +97,19 @@
    "label": "Route",
    "options": "Route Master",
    "reqd": 1
+  },
+  {
+   "fieldname": "return_by",
+   "fieldtype": "Select",
+   "label": "Return By",
+   "options": "\nCustomer\nWarehouse"
+  },
+  {
+   "depends_on": "eval: doc.return_by == \"Warehouse\";",
+   "fieldname": "warehouse",
+   "fieldtype": "Link",
+   "label": "Warehouse",
+   "options": "Warehouse"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -104,7 +120,7 @@
    "link_fieldname": "crate_return"
   }
  ],
- "modified": "2025-01-08 23:29:59.709352",
+ "modified": "2025-01-13 00:01:55.310918",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "Crate Return",
