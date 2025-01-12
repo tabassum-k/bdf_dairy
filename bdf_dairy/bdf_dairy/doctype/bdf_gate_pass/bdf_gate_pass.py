@@ -7,16 +7,7 @@ import math
 class BDFGatePass(Document):
     def on_cancel(self):
         for si in self.sales_invoice_details:
-            opening_qty = 0
-            opening = frappe.db.sql("""
-                SELECT balance 
-                FROM `tabCrate Ledger` 
-                WHERE customer = %s AND crate_type = %s 
-                ORDER BY creation DESC 
-                LIMIT 1
-            """, (si.customer, si.crate_type), as_dict=True)
-            if len(opening) > 0:
-                opening_qty = opening[0]['balance']
+            opening_qty = self.get_customer_opening(si.customer, si.crate_type)
             crate_ledger = frappe.new_doc("Crate Ledger")
             crate_ledger.customer = si.customer
             crate_ledger.route = self.route
@@ -29,17 +20,7 @@ class BDFGatePass(Document):
             crate_ledger.save()
             frappe.db.set_value("Sales Invoice", si.sales_invoice, 'gate_pass', 0)
         for st in self.stock_entry_details:
-            opening_qty = 0
-            # opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE warehouse = %s AND crate_type = %s", (st.warehouse, st.crate_type), as_dict = True)
-            opening = frappe.db.sql("""
-                SELECT balance 
-                FROM `tabCrate Ledger` 
-                WHERE warehouse = %s AND crate_type = %s 
-                ORDER BY creation DESC 
-                LIMIT 1
-            """, (st.warehouse, st.crate_type), as_dict=True)
-            if len(opening) > 0:
-                opening_qty = opening[0]['balance']
+            opening_qty = self.get_warehouse_opening(st.warehouse, st.crate_type)
             crate_ledger = frappe.new_doc("Crate Ledger")
             crate_ledger.warehouse = st.warehouse
             crate_ledger.route = self.route
@@ -55,16 +36,7 @@ class BDFGatePass(Document):
 
     def on_submit(self):
         for si in self.sales_invoice_details:
-            opening_qty = 0
-            opening = frappe.db.sql("""
-                SELECT balance 
-                FROM `tabCrate Ledger` 
-                WHERE customer = %s AND crate_type = %s 
-                ORDER BY creation DESC 
-                LIMIT 1
-            """, (si.customer, si.crate_type), as_dict=True)
-            if len(opening) > 0:
-                opening_qty = opening[0]['balance']
+            opening_qty = self.get_customer_opening(si.customer, si.crate_type)
             crate_ledger = frappe.new_doc("Crate Ledger")
             crate_ledger.customer = si.customer
             crate_ledger.route = self.route
@@ -78,16 +50,7 @@ class BDFGatePass(Document):
             frappe.db.set_value("Sales Invoice", si.sales_invoice, 'gate_pass', 1)
 
         for st in self.stock_entry_details:
-            opening_qty = 0
-            opening = frappe.db.sql("""
-                SELECT balance 
-                FROM `tabCrate Ledger` 
-                WHERE warehouse = %s AND crate_type = %s 
-                ORDER BY creation DESC 
-                LIMIT 1
-            """, (st.warehouse, st.crate_type), as_dict=True)
-            if len(opening) > 0:
-                opening_qty = opening[0]['balance']
+            opening_qty = self.get_warehouse_opening(st.warehouse, st.crate_type)
             crate_ledger = frappe.new_doc("Crate Ledger")
             crate_ledger.warehouse = st.warehouse
             crate_ledger.route = self.route
@@ -192,16 +155,14 @@ class BDFGatePass(Document):
             
 
         for si in sales_invoices:
-            opening_qty, issue_qty = 0, 0
+            issue_qty = 0
             crate_types = {}
             for items in self.get('gate_pass_items', {'crate_qty': ['>', 0], 'sales_invoice': si}):
                 issue_qty += items.crate_qty
                 crate_types[items.crate_type] = crate_types.get(items.crate_type, 0) + items.crate_qty
             for crate, qty in crate_types.items():
                 customer = frappe.get_value("Sales Invoice", si, 'customer')
-                opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE customer = %s AND crate_type = %s", (customer, crate), as_dict=True)
-                if len(opening) > 0:
-                    opening_qty = opening[0]['balance']
+                opening_qty = self.get_customer_opening(customer, crate)
                 if crate in total_opening_qty:
                     total_opening_qty[crate] += opening_qty
                 else:
@@ -230,9 +191,7 @@ class BDFGatePass(Document):
                 crate_types[items.crate_type] = crate_types.get(items.crate_type, 0) + items.crate_qty
             for crate, qty in crate_types.items():
                 warehouse = frappe.get_value("Stock Entry Detail", {'parent': st}, 't_warehouse')
-                opening = frappe.db.sql("SELECT balance FROM `tabCrate Ledger` WHERE warehouse = %s AND crate_type = %s", (warehouse, crate), as_dict=True)
-                if len(opening) > 0:
-                    opening_qty = opening[0]['balance']
+                opening = self.get_warehouse_opening(warehouse, crate)
                 if crate in total_opening_qty:
                     total_opening_qty[crate] += opening_qty
                 else:
@@ -303,6 +262,33 @@ class BDFGatePass(Document):
         self.total_extra_crate = total_extra_crate
         self.save()
 
+    @frappe.whitelist()
+    def get_customer_opening(self, customer, crate_type):
+        opening = frappe.db.sql("""
+                SELECT balance 
+                FROM `tabCrate Ledger` 
+                WHERE customer = %s AND crate_type = %s 
+                ORDER BY creation DESC 
+                LIMIT 1
+            """, (customer, crate_type), as_dict=True)
+        if len(opening) > 0:
+            return opening[0]['balance']
+        else:
+            return 0
+
+    @frappe.whitelist()
+    def get_warehouse_opening(self, warehouse, crate_type):
+        opening = frappe.db.sql("""
+            SELECT balance 
+            FROM `tabCrate Ledger` 
+            WHERE warehouse = %s AND crate_type = %s 
+            ORDER BY creation DESC 
+            LIMIT 1
+        """, (warehouse, crate_type), as_dict=True)
+        if len(opening) > 0:
+            return opening[0]['balance']
+        else:
+            return 0
     
 
 

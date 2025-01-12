@@ -19,6 +19,62 @@ frappe.ui.form.on('BDF Gate Pass Reconcilation', {
 	}
 });
 
+frappe.ui.form.on('BDF Gate Pass Reconcilation Sales Invoice Details', {
+	customer(frm, cdt, cdn){
+		get_customer_opening(frm, cdt, cdn);
+	},
+	crate_type(frm, cdt,cdn){
+		get_customer_opening(frm, cdt, cdn);
+	}
+})
+
+function get_customer_opening(frm, cdt, cdn){
+	let row = locals[cdt][cdn];
+	if(row.customer && row.crate_type){
+		frm.call({
+			method: 'get_customer_opening',
+			doc: frm.doc,
+			args: {
+				customer: row.customer,
+				crate_type: row.crate_type
+			},
+			callback: function(resp){
+				if(resp.message){
+					frappe.model.set_value(cdt, cdn, 'crate_openning_qty', resp.message);
+				}
+			}
+		})
+	}
+}
+
+frappe.ui.form.on('BDF Gate Pass Reconcilation Stock Entry Details', {
+	warehouse(frm, cdt, cdn){
+		get_warehouse_opening(frm, cdt, cdn);
+	},
+	crate_type(frm, cdt,cdn){
+		get_warehouse_opening(frm, cdt, cdn);
+	}
+})
+
+function get_warehouse_opening(frm, cdt, cdn){
+	let row = locals[cdt][cdn];
+	if(row.customer && row.crate_type){
+		frm.call({
+			method: 'get_warehouse_opening',
+			doc: frm.doc,
+			args: {
+				customer: row.customer,
+				crate_type: row.crate_type
+			},
+			callback: function(resp){
+				if(resp.message){
+					frappe.model.set_value(cdt, cdn, 'crate_openning_qty', resp.message);
+				}
+			}
+		})
+	}
+}
+
 function method_call(frm, method, list_of_table_remove = null) {
     list_of_table_remove = list_of_table_remove || [];
     list_of_table_remove.forEach(function(table_name) {

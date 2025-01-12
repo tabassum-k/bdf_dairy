@@ -18,6 +18,7 @@
  ],
  "fields": [
   {
+   "columns": 2,
    "fieldname": "crate_type",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -26,6 +27,7 @@
    "read_only": 1
   },
   {
+   "columns": 1,
    "fieldname": "crate_openning_qty",
    "fieldtype": "Float",
    "in_list_view": 1,
@@ -36,6 +38,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "columns": 1,
    "fieldname": "crate_issue_qty",
    "fieldtype": "Float",
    "in_list_view": 1,
@@ -43,6 +46,7 @@
   },
   {
    "allow_on_submit": 1,
+   "columns": 1,
    "fieldname": "crate_extra_qty",
    "fieldtype": "Float",
    "in_list_view": 1,
@@ -55,12 +59,14 @@
   },
   {
    "allow_on_submit": 1,
+   "columns": 1,
    "fieldname": "crate_return_qty",
    "fieldtype": "Float",
    "label": "Return Qty",
    "read_only": 1
   },
   {
+   "columns": 1,
    "fieldname": "crate_balance_qty",
    "fieldtype": "Float",
    "in_list_view": 1,
@@ -70,7 +76,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-12-24 23:21:35.089006",
+ "modified": "2025-01-12 20:14:31.707023",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "BDF Gate Pass Reconcilation Crate Summary",
