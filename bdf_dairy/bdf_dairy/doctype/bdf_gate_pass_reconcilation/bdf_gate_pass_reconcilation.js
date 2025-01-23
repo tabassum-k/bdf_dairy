@@ -7,6 +7,7 @@ frappe.ui.form.on('BDF Gate Pass Reconcilation', {
 			return {
 				filters: {
 					'reconcilation_done': 0,
+					'route': frm.doc.route,
 					'docstatus': 1
 				}
 			}

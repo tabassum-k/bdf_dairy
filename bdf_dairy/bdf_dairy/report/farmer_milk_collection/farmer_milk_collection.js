@@ -10,5 +10,8 @@ frappe.query_reports["Farmer Milk Collection"] = {
 		{"label": "DCS", "fieldname": "dcs", "fieldtype": "MultiSelectList", "options":"Warehouse",get_data: function(txt) {
 			return frappe.db.get_link_options("Warehouse", txt);
 		}},
+		{"label": "Farmer", "fieldname": "member", "fieldtype": "MultiSelectList", "options":"Supplier",get_data: function(txt) {
+			return frappe.db.get_link_options("Supplier", txt);
+		}}
 	]
 };

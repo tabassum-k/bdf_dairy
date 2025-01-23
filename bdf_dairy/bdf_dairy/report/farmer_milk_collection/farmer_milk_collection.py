@@ -16,12 +16,16 @@ def get_data(filters):
 	params = {"from_date": filters.get("from_date"), "to_date": filters.get("to_date")}
 
 	if filters.get("shift"):
-		conditions.append("shift = %(shift)s")
+		conditions.append("me.shift = %(shift)s")
 		params["shift"] = filters.get("shift")
 	
 	if filters.get("dcs"):
-		conditions.append("dcs_id in %(dcs)s")
+		conditions.append("me.dcs_id in %(dcs)s")
 		params["dcs"] = filters.get("dcs")
+  
+	if filters.get("member"):
+		conditions.append("me.member in %(member)s")
+		params["member"] = filters.get("member")
 
 	where_clause = " AND ".join(conditions)
 	if where_clause:
@@ -29,24 +33,29 @@ def get_data(filters):
 
 	query = f"""
 		SELECT 
-			dcs_id as dcs, 
-			date, 
-			member, 
-			shift, 
-			SUM(volume) as qty, 
-			SUM(volume) * 1.003 as qty_kg, 
-			AVG(fat) as fat, 
-			AVG(snf) as snf, 
-			SUM(fat_kg) as kg_fat, 
-			SUM(snf_kg) as kg_snf
+			me.dcs_id as dcs, 
+			me.date, 
+			me.member, 
+			s.supplier_name as member_name, 
+			me.shift, 
+			SUM(me.volume) as qty, 
+			SUM(me.volume) * 1.003 as qty_kg, 
+			AVG(me.fat) as fat, 
+			AVG(me.snf) as snf, 
+			SUM(me.fat_kg) as kg_fat, 
+			SUM(me.snf_kg) as kg_snf
 		FROM 
-			`tabMilk Entry`
+			`tabMilk Entry` as me
+		JOIN
+			`tabSupplier`
+   		LEFT JOIN 
+     		`tabSupplier` s on me.member = s.name
 		WHERE 
-			docstatus = 1 
-			AND date BETWEEN %(from_date)s AND %(to_date)s
+			me.docstatus = 1 
+			AND me.date BETWEEN %(from_date)s AND %(to_date)s
 			{where_clause}
 		GROUP BY 
-			dcs_id, date, member, shift
+			me.dcs_id, me.date, me.member, me.shift
 	"""
 
 	data = frappe.db.sql(query, params, as_dict=True)
@@ -56,7 +65,8 @@ def get_columns():
 	return [
 		{"label": "Date", "fieldname": "date", "fieldtype": "Date", "width": 120},
 		{"label": "DCS", "fieldname": "dcs", "fieldtype": "Link", "options": "Warehouse", "width": 120},
-		{"label": "Member", "fieldname": "member", "fieldtype": "Data", "width": 120},
+		{"label": "Farmer", "fieldname": "member", "fieldtype": "Link", "options": "Supplier","width": 120},
+		{"label": "Farmer Name", "fieldname": "member_name", "fieldtype": "Data", "width": 120},
 		{"label": "Shift", "fieldname": "shift", "fieldtype": "Data", "width": 120},
 		{"label": "Qty (LITER)", "fieldname": "qty", "fieldtype": "Float", "width": 120},
 		{"label": "Qty (KG)", "fieldname": "qty_kg", "fieldtype": "Float", "width": 120},

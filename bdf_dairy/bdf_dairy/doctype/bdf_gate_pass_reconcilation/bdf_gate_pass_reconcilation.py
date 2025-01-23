@@ -8,7 +8,7 @@ class BDFGatePassReconcilation(Document):
 	def on_cancel(self):
 		gate_pass = frappe.get_doc("BDF Gate Pass", self.gate_pass)
 		for si in self.sales_invoice_details:
-			opening_qty = self.get_customer_opening(si.customer, si.crate_type)
+			opening_qty = frappe.get_value("Crate Ledger", {'customer': si.customer, 'crate_type': si.crate_type}, 'balance') or 0
 			crate_ledger = frappe.new_doc("Crate Ledger")
 			crate_ledger.customer = si.customer
 			crate_ledger.route = gate_pass.route
@@ -21,25 +21,36 @@ class BDFGatePassReconcilation(Document):
 			crate_ledger.save()
 
 		for st in self.stock_entry_details:
-			opening_qty = self.get_warehouse_opening(st.warehouse, st.crate_type)
+			opening_qty = frappe.get_value("Crate Ledger", {'warehouse': st.warehouse, 'crate_type': st.crate_type}, 'balance') or 0
 			crate_ledger = frappe.new_doc("Crate Ledger")
 			crate_ledger.warehouse = st.warehouse
 			crate_ledger.route = gate_pass.route
 			crate_ledger.crate_type = st.crate_type
 			crate_ledger.opening = opening_qty
-			crate_ledger.issue_qty = st.crate_extra_qty  # Reverse issued quantity
-			crate_ledger.return_qty = st.crate_return_qty  # Reverse returned quantity
+			crate_ledger.issue_qty = st.crate_extra_qty  
+			crate_ledger.return_qty = st.crate_return_qty
 			crate_ledger.balance = opening_qty - st.crate_extra_qty + st.crate_return_qty
 			crate_ledger.bdf_gate_pass = self.gate_pass
 			crate_ledger.save()
 
 		frappe.db.set_value("BDF Gate Pass", self.gate_pass, 'reconcilation_done', 0)
 		frappe.db.commit()
+  
+		for si in self.get('sales_invoice_details', {'sales_invoice': ['!=', None]}):
+			frappe.db.set_value("BDF Gate Pass Sales Invoice Details", {'parent': self.gate_pass, 'sales_invoice': si.sales_invoice}, 'crate_return_qty', 0)
+			frappe.db.set_value("BDF Gate Pass Sales Invoice Details", {'parent': self.gate_pass, 'sales_invoice': si.sales_invoice}, 'crate_extra_qty', 0)
+			frappe.db.set_value("BDF Gate Pass Sales Invoice Details", {'parent': self.gate_pass, 'sales_invoice': si.sales_invoice}, 'crate_balance_qty', 0)
+
+
+		for st in self.get('stock_entry_details', {'stock_entry': ['!=', None]}):
+			frappe.db.set_value("BDF Gate Pass Stock Entry Details", {'parent': self.gate_pass, 'stock_entry': st.stock_entry}, 'crate_return_qty', 0)
+			frappe.db.set_value("BDF Gate Pass Stock Entry Details", {'parent': self.gate_pass, 'stock_entry': st.stock_entry}, 'crate_extra_qty', 0)
+			frappe.db.set_value("BDF Gate Pass Stock Entry Details", {'parent': self.gate_pass, 'stock_entry': st.stock_entry}, 'crate_balance_qty', 0)
 
 	def on_submit(self):
 		gate_pass = frappe.get_doc("BDF Gate Pass",self.gate_pass)	
 		for si in self.sales_invoice_details:
-			opening_qty = self.get_customer_opening(si.customer, si.crate_type)
+			opening_qty = frappe.get_value("Crate Ledger", {'customer': si.customer, 'crate_type': si.crate_type}, 'balance') or 0
 			crate_ledger = frappe.new_doc("Crate Ledger")
 			crate_ledger.customer = si.customer
 			crate_ledger.route = gate_pass.route
@@ -52,7 +63,7 @@ class BDFGatePassReconcilation(Document):
 			crate_ledger.save()
 
 		for st in self.stock_entry_details:
-			opening_qty = self.get_warehouse_opening(st.warehouse, st.crate_type)
+			opening_qty = frappe.get_value("Crate Ledger", {'warehouse': st.warehouse, 'crate_type': st.crate_type}, 'balance') or 0
 			crate_ledger = frappe.new_doc("Crate Ledger")
 			crate_ledger.warehouse = st.warehouse
 			crate_ledger.route = gate_pass.route
@@ -64,6 +75,17 @@ class BDFGatePassReconcilation(Document):
 			crate_ledger.bdf_gate_pass = self.gate_pass
 			crate_ledger.save()
 		frappe.db.set_value("BDF Gate Pass", self.gate_pass, 'reconcilation_done', 1)
+		
+		for si in self.get('sales_invoice_details', {'sales_invoice': ['!=', None]}):
+			frappe.db.set_value("BDF Gate Pass Sales Invoice Details", {'parent': self.gate_pass, 'sales_invoice': si.sales_invoice}, 'crate_return_qty', si.crate_return_qty)
+			frappe.db.set_value("BDF Gate Pass Sales Invoice Details", {'parent': self.gate_pass, 'sales_invoice': si.sales_invoice}, 'crate_extra_qty', si.crate_extra_qty)
+			frappe.db.set_value("BDF Gate Pass Sales Invoice Details", {'parent': self.gate_pass, 'sales_invoice': si.sales_invoice}, 'crate_balance_qty', si.crate_balance_qty)
+
+		for st in self.get('stock_entry_details', {'stock_entry': ['!=', None]}):
+			frappe.db.set_value("BDF Gate Pass Stock Entry Details", {'parent': self.gate_pass, 'stock_entry': st.stock_entry}, 'crate_return_qty', st.crate_return_qty)
+			frappe.db.set_value("BDF Gate Pass Stock Entry Details", {'parent': self.gate_pass, 'stock_entry': st.stock_entry}, 'crate_extra_qty', st.crate_extra_qty)
+			frappe.db.set_value("BDF Gate Pass Stock Entry Details", {'parent': self.gate_pass, 'stock_entry': st.stock_entry}, 'crate_balance_qty', st.crate_balance_qty)
+
 
 	def before_save(self):
 		self.crate_summary.clear()
@@ -155,7 +177,7 @@ class BDFGatePassReconcilation(Document):
 		opening_qty = 0
 		gate_pass = frappe.get_doc("BDF Gate Pass",self.gate_pass)
 		for st in gate_pass.stock_entry_details:
-			opening_qty = self.get_warehouse_opening(st.warehouse, st.crate_type)
+			opening_qty = frappe.get_value("Crate Ledger", {'warehouse': st.warehouse, 'crate_type': st.crate_type}, 'balance') or 0
 			self.append('stock_entry_details',{
 				'stock_entry': st.stock_entry,
 				'warehouse': st.warehouse,
@@ -166,7 +188,7 @@ class BDFGatePassReconcilation(Document):
 			})
 
 		for si in gate_pass.sales_invoice_details:
-			opening_qty = self.get_customer_opening(si.customer, si.crate_type)
+			opening_qty = frappe.get_value("Crate Ledger", {'customer': si.customer, 'crate_type': si.crate_type}, 'balance') or 0
 			self.append('sales_invoice_details', {
 				'sales_invoice': si.sales_invoice,
 				'customer': si.customer,
@@ -183,30 +205,30 @@ class BDFGatePassReconcilation(Document):
 				'quantity': cr.quantity
 			})
 
-	@frappe.whitelist()
-	def get_customer_opening(self, customer, crate_type):
-		opening = frappe.db.sql("""
-				SELECT balance 
-				FROM `tabCrate Ledger` 
-				WHERE customer = %s AND crate_type = %s 
-				ORDER BY creation DESC 
-				LIMIT 1
-			""", (customer, crate_type), as_dict=True)
-		if len(opening) > 0:
-			return opening[0]['balance']
-		else:
-			return 0
+	# @frappe.whitelist()
+	# def get_customer_opening(self, customer, crate_type):
+	# 	opening = frappe.db.sql("""
+	# 			SELECT balance 
+	# 			FROM `tabCrate Ledger` 
+	# 			WHERE customer = %s AND crate_type = %s 
+	# 			ORDER BY creation DESC 
+	# 			LIMIT 1
+	# 		""", (customer, crate_type), as_dict=True)
+	# 	if len(opening) > 0:
+	# 		return opening[0]['balance']
+	# 	else:
+	# 		return 0
 
-	@frappe.whitelist()
-	def get_warehouse_opening(self, warehouse, crate_type):
-		opening = frappe.db.sql("""
-			SELECT balance 
-			FROM `tabCrate Ledger` 
-			WHERE warehouse = %s AND crate_type = %s 
-			ORDER BY creation DESC 
-			LIMIT 1
-		""", (warehouse, crate_type), as_dict=True)
-		if len(opening) > 0:
-			return opening[0]['balance']
-		else:
-			return 0
+	# @frappe.whitelist()
+	# def get_warehouse_opening(self, warehouse, crate_type):
+	# 	opening = frappe.db.sql("""
+	# 		SELECT balance 
+	# 		FROM `tabCrate Ledger` 
+	# 		WHERE warehouse = %s AND crate_type = %s 
+	# 		ORDER BY creation DESC 
+	# 		LIMIT 1
+	# 	""", (warehouse, crate_type), as_dict=True)
+	# 	if len(opening) > 0:
+	# 		return opening[0]['balance']
+	# 	else:
+	# 		return 0

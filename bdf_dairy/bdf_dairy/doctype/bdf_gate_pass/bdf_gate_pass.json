@@ -34,6 +34,10 @@
   "sales_invoice_details",
   "stock_entry_details",
   "challan_crate_summary",
+  "section_break_0uni5",
+  "total_supply_qty",
+  "column_break_7nylw",
+  "grand_total",
   "amended_from"
  ],
  "fields": [
@@ -205,6 +209,26 @@
    "fieldtype": "Check",
    "label": "Gate Pass Reconcilation Done",
    "read_only": 1
+  },
+  {
+   "fieldname": "section_break_0uni5",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "total_supply_qty",
+   "fieldtype": "Float",
+   "label": "Total Supply Qty",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_7nylw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "grand_total",
+   "fieldtype": "Currency",
+   "label": "Grand Total",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -219,7 +243,7 @@
    "link_fieldname": "gate_pass"
   }
  ],
- "modified": "2025-01-08 00:01:00.664624",
+ "modified": "2025-01-23 23:40:42.724675",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "BDF Gate Pass",
