@@ -71,6 +71,7 @@ class BDFGatePass(Document):
 
     def before_save(self):
         self.sales_invoice_details.clear()
+        self.no_crate_invoice.clear()
         self.stock_entry_details.clear()
         self.gate_pass_items_summary.clear()
         self.total_crate_summary.clear()
@@ -79,6 +80,7 @@ class BDFGatePass(Document):
         sales_invoices = {}
         stock_entries = {}
         item_qty_sum = {}
+        crate_si = []
         total_crate_qty, total_extra_crate, challan_wise_crate, total_supply_qty, grand_total = 0, 0, 0, 0, 0
         total_opening_qty, total_issue_qty = {}, {}
 
@@ -189,6 +191,7 @@ class BDFGatePass(Document):
                 total_supply_qty += supply_qty
                 grand_tot = frappe.get_value("Sales Invoice", si, 'rounded_total')
                 grand_total += grand_tot
+                crate_si.append(si)
                 self.append('sales_invoice_details', {
                     'sales_invoice': si,
                     'customer': customer,
@@ -231,6 +234,20 @@ class BDFGatePass(Document):
                     'crate_issue_qty': qty,
                     'crate_balance_qty': opening_qty + qty,
                     'crate_type': crate,
+                    'grand_total': grand_tot
+                })
+               
+        for si, supply_qty in sales_invoices.items():
+            if si not in crate_si:
+                customer = frappe.get_value("Sales Invoice", si, 'customer')
+                grand_tot = frappe.get_value("Sales Invoice", si, 'rounded_total')
+                grand_total += grand_tot
+                total_supply_qty += supply_qty
+                self.append('no_crate_invoice', {
+                    'sales_invoice': si,
+                    'customer': customer,
+                    'customer_name': frappe.get_value("Sales Invoice", si, 'customer_name'),
+                    'supply_qty': supply_qty,
                     'grand_total': grand_tot
                 })
 

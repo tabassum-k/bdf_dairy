@@ -32,6 +32,7 @@
   "extra_crate",
   "total_extra_crate",
   "sales_invoice_details",
+  "no_crate_invoice",
   "stock_entry_details",
   "challan_crate_summary",
   "section_break_0uni5",
@@ -229,6 +230,12 @@
    "fieldtype": "Currency",
    "label": "Grand Total",
    "read_only": 1
+  },
+  {
+   "fieldname": "no_crate_invoice",
+   "fieldtype": "Table",
+   "label": "No Crate Sales Invoices Details",
+   "options": "BDF Gate Pass No Crate Invoices"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -243,7 +250,7 @@
    "link_fieldname": "gate_pass"
   }
  ],
- "modified": "2025-01-23 23:40:42.724675",
+ "modified": "2025-01-31 10:51:16.408922",
  "modified_by": "Administrator",
  "module": "BDF Dairy",
  "name": "BDF Gate Pass",
