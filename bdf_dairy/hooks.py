@@ -226,4 +226,10 @@ fixtures = [
             ["name", "in", ["Restrict For Multiple Sales Invoice", "Purchase Order Item Wise Accepted Warehouse", "Purchase Receipt Item Wise Accepted Warehouse", "Purchase Invoice Item Wise Accepted Warehouse"]],
         ],
     },
+    {
+        "doctype": "Stock Entry Type",
+        "filters": [
+            ["name", "in", ["Material Transfer For Gate Pass"]],
+        ],
+    },
 ]

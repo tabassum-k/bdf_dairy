@@ -1,0 +1,10 @@
+[
+ {
+  "add_to_transit": 0,
+  "docstatus": 0,
+  "doctype": "Stock Entry Type",
+  "modified": "2024-12-17 20:53:45.703969",
+  "name": "Material Transfer For Gate Pass",
+  "purpose": "Material Transfer"
+ }
+]
