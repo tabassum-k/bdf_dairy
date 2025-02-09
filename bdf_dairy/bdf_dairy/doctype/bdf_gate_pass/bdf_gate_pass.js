@@ -27,7 +27,7 @@ frappe.ui.form.on('BDF Gate Pass', {
 				{fieldtype: "Select", label: "Delivery Shift", options: "\nMorning\nEvening", fieldname: "delivery_shift", default: frm.doc.shift},
 			],
 			get_query_filters: {
-				docstatus: 1, status: ["=", ["To Bill"]], gate_pass: 0, posting_date: frm.doc.date,
+				docstatus: 1, status: ["=", ["To Bill"]], is_return: 0,gate_pass: 0, posting_date: frm.doc.date,
 			},
 		});
 	},

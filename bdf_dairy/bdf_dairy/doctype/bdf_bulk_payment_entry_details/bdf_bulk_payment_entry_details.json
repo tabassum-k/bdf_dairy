@@ -1,0 +1,321 @@
+{
+ "actions": [],
+ "autoname": "hash",
+ "creation": "2025-02-05 21:05:02.944020",
+ "default_view": "List",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "payment_type",
+  "party_type",
+  "party",
+  "party_name",
+  "due_balance",
+  "column_break_fsftk",
+  "grand_tot",
+  "paid_amount",
+  "balance",
+  "paid_from",
+  "paid_to",
+  "route",
+  "column_break_jzoty",
+  "reference_no",
+  "reference_date",
+  "section_break_p7iqk",
+  "base_paid_amount",
+  "column_break_aznyw",
+  "received_amount",
+  "base_received_amount",
+  "column_break_glwqa",
+  "exchange_rate",
+  "source_exchange_rate",
+  "target_exchange_rate",
+  "column_break_id9ym",
+  "paid_to_account_currency",
+  "paid_from_account_currency",
+  "account_currency",
+  "section_break_ztq8i",
+  "from_date",
+  "column_break_ncj29",
+  "to_date",
+  "section_break_jw62h",
+  "check",
+  "column_break_ml3et",
+  "section_break_jdhq5",
+  "from_date1",
+  "column_break_npidc",
+  "to_date1",
+  "check2",
+  "reference_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "payment_type",
+   "fieldtype": "Select",
+   "label": "Payment Type",
+   "options": "Receive\nPay\nInternal Transfer"
+  },
+  {
+   "depends_on": "eval:in_list([\"Receive\", \"Pay\"], doc.payment_type)",
+   "fieldname": "party_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Party Type",
+   "options": "DocType",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "columns": 2,
+   "depends_on": "eval:in_list([\"Receive\", \"Pay\"], doc.payment_type) && doc.party_type",
+   "fieldname": "party",
+   "fieldtype": "Dynamic Link",
+   "in_list_view": 1,
+   "label": "Party",
+   "options": "party_type",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:in_list([\"Receive\", \"Pay\"], doc.payment_type) && doc.party_type",
+   "fieldname": "party_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Party Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "due_balance",
+   "fieldtype": "Int",
+   "label": "Due Balance"
+  },
+  {
+   "fieldname": "column_break_fsftk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "grand_tot",
+   "fieldtype": "Int",
+   "label": "Grand Total"
+  },
+  {
+   "fieldname": "paid_amount",
+   "fieldtype": "Int",
+   "label": "Paid Amount"
+  },
+  {
+   "fieldname": "balance",
+   "fieldtype": "Int",
+   "label": "Balance"
+  },
+  {
+   "depends_on": "eval:(in_list([\"Internal Transfer\", \"Pay\"], doc.payment_type) || doc.party)",
+   "fieldname": "paid_from",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Account Paid From",
+   "options": "Account"
+  },
+  {
+   "depends_on": "eval:(in_list([\"Internal Transfer\", \"Receive\"], doc.payment_type) || doc.party)",
+   "fieldname": "paid_to",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Account Paid To",
+   "options": "Account"
+  },
+  {
+   "fieldname": "route",
+   "fieldtype": "Link",
+   "label": "Route",
+   "options": "Route Master"
+  },
+  {
+   "fieldname": "column_break_jzoty",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "reference_no",
+   "fieldtype": "Data",
+   "label": "Cheque/Reference No"
+  },
+  {
+   "fieldname": "reference_date",
+   "fieldtype": "Data",
+   "label": "Cheque/Reference Date"
+  },
+  {
+   "fieldname": "section_break_p7iqk",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "base_paid_amount",
+   "fieldtype": "Currency",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Paid Amount (Company Currency)",
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "column_break_aznyw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "received_amount",
+   "fieldtype": "Currency",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Received Amount",
+   "options": "paid_to_account_currency"
+  },
+  {
+   "fieldname": "base_received_amount",
+   "fieldtype": "Currency",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Received Amount (Company Currency)",
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "column_break_glwqa",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "exchange_rate",
+   "fieldtype": "Float",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Exchange Rate",
+   "precision": "9",
+   "print_hide": 1
+  },
+  {
+   "fieldname": "source_exchange_rate",
+   "fieldtype": "Float",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Source Exchange Rate",
+   "precision": "9"
+  },
+  {
+   "fieldname": "target_exchange_rate",
+   "fieldtype": "Float",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Target Exchange Rate",
+   "precision": "9"
+  },
+  {
+   "fieldname": "column_break_id9ym",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "paid_to_account_currency",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Account Currency (To)",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "paid_from_account_currency",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Account Currency (From)",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "account_currency",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Account Currency",
+   "no_copy": 1,
+   "options": "Currency",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_ztq8i",
+   "fieldtype": "Section Break",
+   "label": "Select Filter for Get OutStanding Invoice"
+  },
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "From Date"
+  },
+  {
+   "fieldname": "column_break_ncj29",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "To Date"
+  },
+  {
+   "fieldname": "section_break_jw62h",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "check",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Get OutStanding Invoice"
+  },
+  {
+   "fieldname": "column_break_ml3et",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_jdhq5",
+   "fieldtype": "Section Break",
+   "label": "Select Filter for Get OutStanding Order"
+  },
+  {
+   "fieldname": "from_date1",
+   "fieldtype": "Date",
+   "label": "From Date"
+  },
+  {
+   "fieldname": "column_break_npidc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "to_date1",
+   "fieldtype": "Date",
+   "label": "To Date"
+  },
+  {
+   "default": "0",
+   "fieldname": "check2",
+   "fieldtype": "Check",
+   "label": "Get OutStanding Order"
+  },
+  {
+   "fieldname": "reference_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Reference Id"
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2025-02-05 21:05:02.944020",
+ "modified_by": "Administrator",
+ "module": "BDF Dairy",
+ "name": "BDF Bulk Payment Entry Details",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
